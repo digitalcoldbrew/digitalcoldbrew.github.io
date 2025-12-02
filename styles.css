@@ -1,0 +1,35 @@
+:root{
+  --bg:#0f1724; --card:#0b1220; --accent:#ff6b6b; --text:#e6eef8;
+  --maxw:1100px; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+}
+*{box-sizing:border-box}
+body{margin:0; background:linear-gradient(180deg,#071021 0%,#0b1220 100%); color:var(--text); line-height:1.5}
+.container{max-width:var(--maxw); margin:0 auto; padding:1.2rem}
+.header-inner{display:flex; justify-content:space-between; align-items:center; gap:1rem}
+.brand{font-weight:700; text-decoration:none; color:var(--text); font-size:1.25rem}
+.brand .accent{color:var(--accent)}
+#menu-toggle{display:none}
+.main-nav .nav-list{display:flex; gap:1rem; list-style:none; padding:0; margin:0}
+.main-nav a{color:var(--text); text-decoration:none; padding:.4rem .6rem; border-radius:8px}
+.main-nav a:focus, .main-nav a:hover{outline:2px solid rgba(255,255,255,.08); background:rgba(255,255,255,.02)}
+
+.hero{padding:3rem 1rem; text-align:left}
+.hero h1{font-size:clamp(1.6rem,3.5vw,2.4rem); margin:0 0 .5rem}
+.lead{opacity:.9; margin-bottom:1rem}
+.cta{display:inline-block; background:var(--accent); color:#fff; padding:.6rem 1rem; border-radius:10px; text-decoration:none}
+.card-grid{display:grid; grid-template-columns:repeat(auto-fit,minmax(220px,1fr)); gap:1rem; margin:1rem 0}
+.card{background:linear-gradient(180deg, rgba(255,255,255,.02), rgba(255,255,255,.01)); padding:1rem; border-radius:12px; box-shadow:0 6px 16px rgba(2,6,23,.6)}
+
+.gallery{display:grid; grid-template-columns:repeat(auto-fit,minmax(240px,1fr)); gap:1rem}
+.gallery img{width:100%; height:auto; display:block; border-radius:8px}
+.contact form{display:grid; gap:.5rem; max-width:600px}
+input, textarea{padding:.6rem; border-radius:8px; border:1px solid rgba(255,255,255,.06); background:transparent; color:var(--text)}
+button.cta{border:none; cursor:pointer}
+
+.site-footer{padding:1rem 0; opacity:.9; text-align:center; margin-top:2rem; border-top:1px solid rgba(255,255,255,.03)}
+
+@media (max-width:720px){
+  #menu-toggle{display:inline-block}
+  .main-nav .nav-list{display:none; flex-direction:column; background:transparent}
+  .main-nav .nav-list.open{display:flex}
+}
