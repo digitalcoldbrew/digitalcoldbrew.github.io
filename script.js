@@ -1,151 +1,95 @@
-// settings: how many viewport-heights of scrolling to fill the glass.
-// Set to 3.0 for "about 3 full screens". Increase to ~3.5 if you prefer more scrolls.
-const SCROLL_FACTOR = 3.0;
-
-const glassWrap = document.getElementById('glass-wrap');
-const liquidGroup = document.getElementById('liquid-group');
-const waveGroup = document.getElementById('wave-group');
-const pour = document.getElementById('pour');
-const droplets = document.getElementById('droplets');
-const siteContent = document.getElementById('site-content');
-const yearEl = document.getElementById('year');
-
-if(yearEl) yearEl.textContent = new Date().getFullYear();
-
-// clamp helper
-const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
-
-// We'll convert scroll (or touch) into a progress [0..1]
-let lastProgress = 0;
-let ticking = false;
-
-function updateFromScroll() {
-  const vh = window.innerHeight || document.documentElement.clientHeight;
-  const maxScroll = vh * SCROLL_FACTOR; // how many pixels to reach full
-  // Use pageYOffset so it works if content grows.
-  const scrolled = clamp(window.scrollY, 0, maxScroll);
-  const progress = clamp(scrolled / maxScroll, 0, 1);
-  if (Math.abs(progress - lastProgress) > 0.0005) {
-    applyProgress(progress);
-    lastProgress = progress;
-  }
-  ticking = false;
+// Wait until GSAP and ScrollTrigger are loaded
+function ready(cb){
+  if(window.gsap && window.gsap.core) return cb();
+  const int = setInterval(()=>{ if(window.gsap && window.gsap.core){ clearInterval(int); cb(); } }, 50);
+  // fallback timeout: 5s then run anyway
+  setTimeout(()=> { if(window.gsap && window.gsap.core) { clearInterval(int); cb(); } }, 5000);
 }
 
-function applyProgress(progress) {
-  // liquid: initial translateY (when progress=0) should be low (liquid offscreen bottom)
-  // The liquid-group translate is defined in the SVG; we'll compute a translateY value
-  // We want the liquid group to move up, revealing more liquid in the glass.
-  // Map progress 0..1 to an SVG translate value (we'll use 720 -> roughly full)
-  // The 'liquid-group' initial transform was translate(0,720) in the SVG.
-  const startY = 720;
-  const endY = 0; // when full, group translate should be near top
-  const curY = startY - (startY - endY) * progress;
-  if (liquidGroup) liquidGroup.setAttribute('transform', `translate(0, ${curY})`);
+ready(()=> {
+  gsap.registerPlugin(ScrollTrigger);
 
-  // subtle wave horizontal sway based on progress and time:
-  if (waveGroup) {
-    // small horizontal shift for realism:
-    waveGroup.setAttribute('transform', `translate(${ -40 + progress * 40 }, ${ -40 - progress * 8 })`);
-  }
+  const liquidGroup = document.getElementById('liquidGroup');
+  const streamGroup = document.getElementById('streamGroup');
+  const dropsGroup = document.getElementById('dropsGroup');
+  const overlay = document.getElementById('overlay');
+  const site = document.getElementById('site');
+  const glassWrap = document.getElementById('glass-wrap');
+  const skipBtn = document.getElementById('skipBtn');
 
-  // show pour while progress < ~0.85, fade out near full
-  if (pour) {
-    pour.style.opacity = (progress < 0.95 && progress > 0.02) ? 1 : 0;
-  }
-  if (droplets) {
-    droplets.style.opacity = (progress > 0.15 && progress < 0.9) ? 1 : 0;
-  }
+  // starting positions (matches SVG transform values)
+  const startY = 840; // initial translateY (liquid offscreen bottom)
+  const endY = 40;    // when "full", bring group up so top of liquid fills glass (tweak if needed)
 
-  // rotate the whole glass a bit based on progress (subtle)
-  if (glassWrap) {
-    const maxRot = 6; // degrees
-    const rot = (progress - 0.5) * 2 * maxRot; // rotate -max..+max around mid-progress
-    glassWrap.style.transform = `rotate(${rot}deg)`;
-  }
+  // create a GSAP timeline that represents the "pour" animation
+  // we'll scrub this timeline with ScrollTrigger
+  const tl = gsap.timeline({ paused: true });
 
-  // when fully filled, reveal site content (fade-in)
-  if (progress >= 1) {
-    revealSite();
-  } else {
-    hideSite();
-  }
-}
+  // 1) stream appears and drops appear quickly
+  tl.to(streamGroup, { autoAlpha: 1, duration: 0.5 }, 0);
+  tl.to(dropsGroup, { autoAlpha: 1, duration: 0.45 }, 0);
 
-// show site content with smooth fade
-function revealSite() {
-  if (!siteContent.classList.contains('visible')) {
-    siteContent.classList.remove('hidden');
-    // small delay so content doesn't flash; also remove glass overlay pointer events
-    requestAnimationFrame(()=> {
-      siteContent.classList.add('visible');
-    });
-    // allow interaction
-    glassWrap.style.pointerEvents = 'none';
-    // optionally fade out the glass after a moment
-    glassWrap.style.transition = 'opacity 0.9s ease .2s, transform 0.7s ease';
-    glassWrap.style.opacity = '0';
-    setTimeout(()=> {
-      glassWrap.style.display = 'none';
-      glassWrap.style.opacity = '1';
-    }, 1200);
-  }
-}
+  // 2) liquid rises (translateY of the liquidGroup)
+  tl.to(liquidGroup, { attr: { transform: `translate(0, ${endY})` }, ease: 'power2.out', duration: 3 }, 0);
 
-function hideSite() {
-  if (!siteContent.classList.contains('hidden')) {
-    siteContent.classList.remove('visible');
-    siteContent.classList.add('hidden');
-    // keep glass visible
-    glassWrap.style.display = 'flex';
-    glassWrap.style.opacity = '1';
-  }
-}
+  // 3) stronger wobble and wave movement near mid-fill for realism (looping subtle)
+  tl.to('#wave', { x: 20, y: -6, repeat: 3, yoyo: true, ease: 'sine.inOut', duration: 0.8 }, 0.5);
 
-// tie into scroll events efficiently
-function onScroll() {
-  if (!ticking) {
-    window.requestAnimationFrame(updateFromScroll);
-    ticking = true;
-  }
-}
+  // 4) slight 3D tilt effect on the glass wrapper
+  tl.to(glassWrap, { rotation: 4, transformOrigin: '50% 50%', ease: 'power1.inOut', duration: 1.8 }, 0.6);
 
-// support touch move (mobile) — update on touchmove as well
-let lastTouchY = null;
-function onTouchMove(e) {
-  if (e.touches && e.touches.length) {
-    lastTouchY = e.touches[0].clientY;
-  }
-  onScroll();
-}
+  // 5) finish: hide stream/drops and settle wave
+  tl.to(streamGroup, { autoAlpha: 0, duration: 0.4 }, 2.6);
+  tl.to(dropsGroup, { autoAlpha: 0, duration: 0.4 }, 2.6);
 
-// listen for wheel, scroll, and touch
-window.addEventListener('scroll', onScroll, { passive: true });
-window.addEventListener('wheel', onScroll, { passive: true });
-window.addEventListener('touchmove', onTouchMove, { passive: true });
+  // optional: small bounce to final wave
+  tl.to('#wave', { x: 0, y: 0, ease: 'elastic.out(1, 0.6)', duration: 0.8 }, 2.6);
 
-// initialize at load (in case user reloads after some scroll)
-window.addEventListener('load', ()=> {
-  // if the content height is small, we still map scrollY -> progress; ensure start state
-  updateFromScroll();
-  // set a gentle animation for droplets (make a tiny continuous floating)
-  const drops = document.querySelectorAll('.drop');
-  drops.forEach((d, i)=> {
-    d.animate([
-      { transform: 'translateY(0)', opacity: 1 },
-      { transform: 'translateY(8px)', opacity: 0.6 },
-      { transform: 'translateY(0)', opacity: 1 }
-    ], { duration: 2200 + i*200, iterations: Infinity, easing: 'ease-in-out' });
+  // When timeline completes (fully filled), reveal site
+  tl.call(()=> {
+    // fade out overlay
+    gsap.to(overlay, { autoAlpha: 0, duration: 0.9, ease: 'power2.out' });
+    site.classList.remove('hidden');
+    site.classList.add('visible');
+    // remove overlay from flow after animation
+    setTimeout(()=> overlay.style.display = 'none', 1000);
+  }, null, '+=0');
+
+  // ScrollTrigger to scrub timeline: control how much scroll needed by "end"
+  // set end to "+=3000" (px) on desktop and lower on mobile
+  const isMobile = /Mobi|Android/i.test(navigator.userAgent) || window.innerWidth < 720;
+  const endDistance = isMobile ? 1400 : 2400; // tune these for feel
+  ScrollTrigger.create({
+    animation: tl,
+    trigger: document.body,
+    start: 'top top',
+    end: `+=${endDistance}`,
+    scrub: 0.6,
+    anticipatePin: 1,
+    onUpdate: self => {
+      // show/hide elements based on progress
+      // keep the overlay pointer events disabled until finish
+      if(self.progress > 0.02) {
+        overlay.style.pointerEvents = 'none';
+      }
+    }
   });
 
-  // small continuous animation for pour stream (scale stroke-dashoffset)
-  const stream = document.getElementById('stream');
-  if (stream) {
-    stream.style.strokeDasharray = '20 12';
-    stream.style.strokeDashoffset = '0';
-    setInterval(()=> {
-      const off = parseFloat(stream.style.strokeDashoffset || '0') - 6;
-      stream.style.strokeDashoffset = `${off}`;
-    }, 120);
-  }
+  // Skip button: instantly complete timeline and show content
+  skipBtn.addEventListener('click', ()=> {
+    tl.progress(1);
+  });
+
+  // Keyboard skip
+  window.addEventListener('keydown', e => {
+    if(e.key === 's' || e.key === ' ') {
+      tl.progress(1);
+    }
+  });
+
+  // mobile usability: if user doesn't scroll after 6s, show "tap to pour" overlay instruction
+  let idleTimer = setTimeout(()=> {
+    // small pulse to indicate interaction if user hasn't scrolled
+    gsap.fromTo('#skipBtn', { scale: 1 }, { scale: 1.07, duration: 1, yoyo: true, repeat: 3, ease: 'sine.inOut' });
+  }, 6000);
 });
