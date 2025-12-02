@@ -1,5 +1,5 @@
 :root{
-  --bg:#efe0cf;        /* page behind glass (light coffee milk) */
+  --bg:#efe0cf;
   --text:#2b2b2b;
   --accent:#6b3f2a;
   --muted:#5b5047;
@@ -7,33 +7,27 @@
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 *{box-sizing:border-box}
-html,body{height:100%; margin:0; background:var(--bg);}
-body{overflow-x:hidden; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale; color:var(--text)}
+html,body{height:100%; margin:0; background:var(--bg); -webkit-font-smoothing:antialiased;}
+body{color:var(--text);}
 
-/* glass wrapper covers the full viewport and sits on top of the page until filled */
-#glass-wrap{
-  position:fixed;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  z-index:9999;
-  pointer-events:none; /* allow scroll events to pass */
-  background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02));
-}
-
-/* svg scales to fill viewport nicely while preserving glass proportions */
+/* Overlay */
+#overlay{ position:fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; pointer-events:none; background:linear-gradient(180deg, rgba(255,255,255,0.02), rgba(0,0,0,0.02)); transition:opacity .6s ease; }
+#glass-wrap{ width:100vw; height:100vh; transform-style:preserve-3d; will-change:transform; }
+/* svg should cover viewport nicely */
 #glass-svg{ width:100vw; height:100vh; display:block; }
 
-/* site content initially hidden until glass fills */
-#site-content.hidden{ opacity:0; pointer-events:none; user-select:none; transform:translateY(12px); transition:opacity .6s ease, transform .6s ease; }
-#site-content.visible{ opacity:1; pointer-events:auto; user-select:auto; transform:none; transition:opacity .8s ease, transform .6s ease; z-index:10; position:relative; }
+/* Skip button */
+#skipBtn{ position:fixed; top:20px; right:20px; z-index:10010; pointer-events:auto; background:rgba(255,255,255,0.95); color:#000; border:none; padding:8px 12px; border-radius:8px; font-weight:700; cursor:pointer; box-shadow:0 6px 18px rgba(0,0,0,0.08); }
 
-/* basic header/content styles (kept simple) */
-.container{ max-width:var(--maxw); margin:0 auto; padding:1.25rem; }
+/* site hidden until reveal */
+.site.hidden{ opacity:0; pointer-events:none; transform:translateY(10px); transition:opacity .6s ease, transform .6s ease; }
+.site.visible{ opacity:1; pointer-events:auto; transform:none; transition:opacity .8s ease, transform .6s ease; z-index:10; position:relative; }
+
+/* basic site layout */
+.container{ max-width:var(--maxw); margin:0 auto; padding:1.2rem; }
 .header-inner{ display:flex; justify-content:space-between; align-items:center; gap:1rem; }
 .brand{ display:flex; align-items:center; gap:.6rem; text-decoration:none; color:var(--text); }
-.brand-logo{ width:44px; height:44px; object-fit:cover; border-radius:8px; display:inline-block; }
+.brand-logo{ width:44px; height:44px; border-radius:8px; object-fit:cover; display:inline-block; }
 .brand-text{ font-weight:800; font-size:1.25rem; }
 .brand .accent{ color:var(--accent); }
 
@@ -41,18 +35,14 @@ body{overflow-x:hidden; -webkit-font-smoothing:antialiased; -moz-osx-font-smooth
 .main-nav a{ color:var(--text); text-decoration:none; padding:.4rem .6rem; border-radius:8px; }
 .main-nav a:hover{ background:rgba(0,0,0,0.03); }
 
-.welcome{ text-align:center; padding-top:6rem; padding-bottom:4rem; }
+.welcome{ text-align:center; padding-top:6rem; padding-bottom:3rem; }
 .welcome h1{ font-size:clamp(1.6rem,4.5vw,3.6rem); margin:0 0 .5rem; letter-spacing:-0.02em; }
 .lead{ color:var(--muted); margin-bottom:1rem; }
 .cta{ display:inline-block; background:var(--accent); color:#fff; padding:.6rem 1rem; border-radius:10px; text-decoration:none; }
 
-/* pour & droplet visibility controlled by JS via .active state */
-.pour-visible{ opacity:1; transition:opacity .3s ease; }
-.drops-visible{ opacity:1; transition:opacity .15s linear; }
-
-/* responsive */
+/* responsive tweaks */
 @media (max-width:720px){
+  #skipBtn{ top:12px; right:12px; padding:6px 10px; font-size:13px; }
   .brand-text{ font-size:1rem; }
   .welcome{ padding-top:4rem; padding-bottom:2rem; }
-  #glass-svg{ /* ensure good crop on phones */ object-fit:cover; }
 }
