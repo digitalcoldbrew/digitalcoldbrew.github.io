@@ -6,68 +6,66 @@
   <title>Digital ColdBrew — Home</title>
   <meta name="description" content="Digital ColdBrew — Digital marketing & creative production" />
   <link rel="stylesheet" href="styles.css">
+  <!-- GSAP + ScrollTrigger from CDN -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js" defer></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js" defer></script>
 </head>
 <body>
-  <!-- full-screen glass + liquid overlay -->
-  <div id="glass-wrap" aria-hidden="true">
-    <!-- full-viewport SVG representing a tall glass shape; liquid is a rect clipped to the glass -->
-    <svg id="glass-svg" viewBox="0 0 600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
-      <defs>
-        <!-- glass shape path (rounded rectangle with a small lip) -->
-        <clipPath id="glass-clip">
-          <path id="glass-path" d="M150 30
-            Q140 20 150 10
-            L450 10 Q460 20 450 30
-            L420 920 Q420 970 300 980 Q180 970 180 920 Z" />
-        </clipPath>
+  <!-- Overlay that looks like fullscreen glass -->
+  <div id="overlay" aria-hidden="true">
+    <div id="glass-wrap">
+      <svg id="glass-svg" viewBox="0 0 600 1000" preserveAspectRatio="xMidYMid slice" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="brewGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#c69259"/>
+            <stop offset="100%" stop-color="#5a3728"/>
+          </linearGradient>
+          <clipPath id="glassClip">
+            <!-- rounded tall glass shape -->
+            <path id="glassPath" d="M150 30 Q140 20 150 10 L450 10 Q460 20 450 30 L420 920 Q420 970 300 980 Q180 970 180 920 Z"/>
+          </clipPath>
+        </defs>
 
-        <!-- gradient for the liquid -->
-        <linearGradient id="brewGrad" x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stop-color="#b77a46"/>
-          <stop offset="100%" stop-color="#5a3728"/>
-        </linearGradient>
+        <!-- subtle glass stroke -->
+        <g transform="translate(-10,-8)">
+          <use href="#glassPath" fill="rgba(255,255,255,0.02)" stroke="rgba(0,0,0,0.06)" stroke-width="6"/>
+        </g>
 
-        <!-- a simple wave shape to top the liquid for realism -->
-        <path id="wave" d="M0 0 C80 14,160 -10,240 6 C320 22,400 -6,480 8 C560 22,640 2,720 10 L720 60 L0 60 Z"/>
-      </defs>
+        <!-- clipped content: liquid + waves + pour -->
+        <g clip-path="url(#glassClip)">
+          <!-- glass inner -->
+          <rect x="0" y="0" width="600" height="1000" fill="rgba(255,255,255,0.02)"/>
+          <!-- Liquid group - we animate this group translateY to 'fill' glass -->
+          <g id="liquidGroup" transform="translate(0,840)">
+            <rect id="liquidRect" x="0" y="0" width="600" height="1400" fill="url(#brewGrad)"></rect>
+            <!-- wave layer on top for realism -->
+            <g id="wave" transform="translate(-60,-40)" opacity="0.95">
+              <path id="wavePath1" d="M0 36 C80 14,160 54,240 36 C320 18,400 60,480 36 C560 10,640 44,720 36 L720 80 L0 80 Z" fill="#000" opacity="0.06"/>
+              <path id="wavePath2" d="M0 46 C100 34,200 66,300 40 C400 10,520 70,620 48 L720 80 L0 80 Z" fill="#fff" opacity="0.04"/>
+            </g>
+          </g>
 
-      <!-- faint glass outer stroke -->
-      <g transform="translate( -60 -10 )">
-        <use href="#glass-path" fill="rgba(255,255,255,0.02)" stroke="rgba(0,0,0,0.06)" stroke-width="6"/>
-      </g>
+          <!-- Pour stream group (positioned near lip) -->
+          <g id="streamGroup" transform="translate(430,-30)" opacity="0">
+            <path id="streamPath" d="M0 0 C6 40 8 90 6 140 C4 190 12 240 4 300" stroke="#492617" stroke-width="14" stroke-linecap="round" fill="none"/>
+            <circle cx="0" cy="10" r="6" fill="#492617" />
+          </g>
 
-      <!-- group clipped to the glass shape -->
-      <g clip-path="url(#glass-clip)">
-        <!-- background inside the glass (glass inner) -->
-        <rect x="0" y="0" width="600" height="1000" fill="rgba(255,255,255,0.02)"/>
-
-        <!-- liquid rectangle - we will transform translateY to make it rise -->
-        <g id="liquid-group" transform="translate(0,720)">
-          <rect id="liquid-rect" x="0" y="0" width="600" height="1000" fill="url(#brewGrad)"/>
-          <!-- moving wave on top of the liquid -->
-          <g id="wave-group" transform="translate(-60,-40)" opacity="0.95">
-            <use href="#wave" fill="rgba(0,0,0,0.08)"/>
-            <use href="#wave" fill="rgba(255,255,255,0.06)" transform="translate(0,6) scale(0.98,0.7)"/>
+          <!-- falling drops group -->
+          <g id="dropsGroup" opacity="0">
+            <circle class="d" cx="480" cy="80" r="8" fill="#3f2618" opacity="0.95"/>
+            <circle class="d" cx="490" cy="140" r="6" fill="#5a3728" opacity="0.9"/>
           </g>
         </g>
+      </svg>
+    </div>
 
-        <!-- small pour stream (visible while progress small-to-mid) -->
-        <g id="pour" transform="translate(420, -30)" opacity="0">
-          <path id="stream" d="M0 0 C6 40 8 90 6 140 C4 190 12 240 4 300" stroke="url(#brewGrad)" stroke-width="12" stroke-linecap="round" fill="none" stroke-linejoin="round" opacity="0.95"/>
-          <circle id="drip-top" cx="0" cy="10" r="6" fill="#5a3728" />
-        </g>
-
-        <!-- a few droplets that fall as part of pour effect -->
-        <g id="droplets" opacity="0">
-          <circle class="drop" cx="480" cy="80" r="8" fill="#4f2e20" opacity="0.95"/>
-          <circle class="drop" cx="490" cy="140" r="6" fill="#5a3728" opacity="0.9"/>
-        </g>
-      </g>
-    </svg>
+    <!-- Skip button (useful on mobile) -->
+    <button id="skipBtn" aria-label="Skip pour and show website">Skip</button>
   </div>
 
-  <!-- actual site content — hidden until glass is full -->
-  <main id="site-content" class="hidden" role="main" aria-live="polite">
+  <!-- MAIN SITE — hidden until overlay animation complete -->
+  <main id="site" class="hidden" role="main" aria-live="polite">
     <header class="site-header">
       <div class="container header-inner">
         <a class="brand" href="index.html" aria-label="Home">
@@ -93,19 +91,16 @@
       <a class="cta" href="portfolio.pdf" target="_blank">View Portfolio</a>
     </section>
 
-    <!-- you can keep the rest of your multi-page content below -->
     <section class="container">
       <h2>Our Services</h2>
       <p>We combine creative production and sharp digital marketing for apparel & lifestyle brands.</p>
     </section>
 
     <footer class="site-footer">
-      <div class="container">
-        <p>&copy; <span id="year"></span> Digital ColdBrew</p>
-      </div>
+      <div class="container"><p>&copy; <span id="year"></span> Digital ColdBrew</p></div>
     </footer>
   </main>
 
-  <script src="script.js"></script>
+  <script src="script.js" defer></script>
 </body>
 </html>
