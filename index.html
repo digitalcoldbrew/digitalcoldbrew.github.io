@@ -3,21 +3,27 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Your Business Name — Home</title>
-  <meta name="description" content="Aesthetic, accessible website for Your Business Name" />
+  <title>Digital ColdBrew — Home</title>
+  <meta name="description" content="Digital ColdBrew — Digital marketing & production" />
   <link rel="stylesheet" href="styles.css">
 </head>
 <body>
   <header class="site-header" role="banner">
     <div class="container header-inner">
-      <a class="brand" href="#" aria-label="Home">Your<span class="accent">Brand</span></a>
+      <a class="brand" href="index.html" aria-label="Home">
+        <img src="logo.png" alt="Digital ColdBrew logo" class="brand-logo" onerror="this.style.display='none'">
+        <span class="brand-text">Digital<span class="accent">ColdBrew</span></span>
+      </a>
+
       <nav class="main-nav" role="navigation" aria-label="Main navigation">
         <button id="menu-toggle" aria-expanded="false" aria-controls="nav-list">Menu</button>
         <ul id="nav-list" class="nav-list">
-          <li><a href="#services">Services</a></li>
-          <li><a href="#studio">Production House</a></li>
-          <li><a href="#pricing">Pricing</a></li>
-          <li><a href="#contact">Contact</a></li>
+          <li><a href="index.html" class="active">Home</a></li>
+          <li><a href="about.html">About</a></li>
+          <li><a href="services.html">Services</a></li>
+          <li><a href="studio.html">Studio</a></li>
+          <li><a href="portfolio.pdf" target="_blank" rel="noopener">Portfolio</a></li>
+          <li><a href="contact.html">Contact</a></li>
         </ul>
       </nav>
     </div>
@@ -26,71 +32,63 @@
   <main id="main" class="container" role="main">
     <section class="hero" aria-labelledby="hero-title">
       <h1 id="hero-title">Beautiful content. Smart results.</h1>
-      <p class="lead">Digital marketing + in-house production sets for men’s clothing & aesthetic shoots.</p>
-      <p><a class="cta" href="#contact">Get a Quote</a></p>
+      <p class="lead">Digital marketing + creative production for men's fashion & lifestyle.</p>
+      <p class="buttons">
+        <a class="cta" href="services.html">See Services</a>
+        <a class="cta outline" href="portfolio.pdf" target="_blank" rel="noopener">View Portfolio (PDF)</a>
+      </p>
     </section>
 
-    <section id="services" class="card-grid" aria-labelledby="services-title">
-      <h2 id="services-title">What we do</h2>
+    <section id="quick" class="card-grid" aria-labelledby="quick-title">
+      <h2 id="quick-title">Explore</h2>
       <div class="card">
-        <h3>Digital Marketing</h3>
-        <p>SEO, Ads, Social strategy, performance analytics.</p>
+        <h3><a href="services.html">Digital Marketing</a></h3>
+        <p>SEO, paid ads, social growth, and analytics to move the needle.</p>
       </div>
       <div class="card">
-        <h3>Production House</h3>
-        <p>6 indoor POP sets, lighting, styling & on-site post-production.</p>
+        <h3><a href="studio.html">Studio & Sets</a></h3>
+        <p>Six indoor POP sets, lighting, styling & on-site post-production.</p>
       </div>
       <div class="card">
-        <h3>Photography & E-Commerce</h3>
-        <p>Aesthetic shoots optimized for product pages and ads.</p>
+        <h3><a href="contact.html">Book a Shoot</a></h3>
+        <p>Get a quote or schedule a site visit — quick response.</p>
       </div>
     </section>
 
-    <section id="studio" aria-labelledby="studio-title">
-      <h2 id="studio-title">Production House — Our Sets</h2>
-      <div class="gallery">
-        <figure>
-          <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1200&q=60" alt="Set 1: Warm studio">
-          <figcaption>Set 1 — Urban Brick</figcaption>
-        </figure>
-        <figure>
-          <img src="https://images.unsplash.com/photo-1526178610992-6f1b6021f9c3?auto=format&fit=crop&w=1200&q=60" alt="Set 2: Minimal white">
-          <figcaption>Set 2 — Minimal White</figcaption>
-        </figure>
-        <figure>
-          <img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=1200&q=60" alt="Set 3: Moody studio">
-          <figcaption>Set 3 — Moody Spotlight</figcaption>
-        </figure>
+    <section id="testimonials" aria-labelledby="testimonials-title">
+      <h2 id="testimonials-title">What clients say</h2>
+      <div class="card">
+        <p>"Fast, creative, and ROI-driven campaigns — highly recommended."</p>
+        <p class="muted">— Happy Client</p>
       </div>
-    </section>
-
-    <section id="pricing" aria-labelledby="pricing-title">
-      <h2 id="pricing-title">Pricing (example)</h2>
-      <ul>
-        <li>Studio half-day (4 hours): ₹8,000</li>
-        <li>Full-day production: ₹15,000</li>
-        <li>Digital marketing starter package: ₹12,000 / month</li>
-      </ul>
-    </section>
-
-    <section id="contact" aria-labelledby="contact-title" class="contact">
-      <h2 id="contact-title">Contact us</h2>
-      <form id="contactForm" action="#" method="post" aria-label="Contact form (demo)">
-        <label for="name">Name</label>
-        <input id="name" name="name" type="text" required aria-required="true" />
-        <label for="email">Email</label>
-        <input id="email" name="email" type="email" required />
-        <label for="message">Message</label>
-        <textarea id="message" name="message" rows="5" required></textarea>
-        <button type="submit" class="cta">Send</button>
-        <p id="formStatus" aria-live="polite"></p>
-      </form>
     </section>
   </main>
 
+  <!-- Decorative animated glass (aria-hidden since it's decorative) -->
+  <div id="coffee-illustration" aria-hidden="true">
+    <svg viewBox="0 0 200 240" class="coffee-svg" xmlns="http://www.w3.org/2000/svg" role="img">
+      <defs>
+        <linearGradient id="coffeeGrad" x1="0" x2="0" y1="0" y2="1">
+          <stop offset="0%" stop-color="#a36c3a" />
+          <stop offset="100%" stop-color="#6b3f2a" />
+        </linearGradient>
+        <clipPath id="glassClip">
+          <rect x="20" y="10" width="160" height="200" rx="18" ry="18"/>
+        </clipPath>
+      </defs>
+
+      <rect x="18" y="8" width="164" height="204" rx="20" ry="20" fill="rgba(255,255,255,0.06)" stroke="rgba(0,0,0,0.08)" stroke-width="3"/>
+      <g clip-path="url(#glassClip)">
+        <path id="coffee-liquid" d="M0,180 C40,165 120,195 200,170 L200,240 L0,240 Z" fill="url(#coffeeGrad)" transform="translate(0,0)" />
+        <circle id="drop" cx="160" cy="170" r="6" fill="#6b3f2a" opacity="0.95"/>
+      </g>
+      <path d="M40 30 C60 20, 140 20, 160 30" stroke="rgba(255,255,255,0.12)" stroke-width="3" fill="none"/>
+    </svg>
+  </div>
+
   <footer class="site-footer" role="contentinfo">
     <div class="container">
-      <p>&copy; <span id="year"></span> Your Business Name — All rights reserved.</p>
+      <p>&copy; <span id="year"></span> Digital ColdBrew — All rights reserved.</p>
     </div>
   </footer>
 
