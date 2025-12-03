@@ -4,6 +4,7 @@
   --muted:#6d5d53;
   --accent:#6b3f2a;
   --maxw:1200px;
+  --glass-w:64vmin;
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
 }
 *{box-sizing:border-box}
@@ -11,49 +12,49 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--text);-webkit-fo
 .container{max-width:var(--maxw);margin:0 auto;padding:1.25rem}
 a{color:inherit;text-decoration:none}
 
-/* Header */
-.site-header{position:sticky;top:0;z-index:60;background:linear-gradient(180deg,rgba(255,255,255,0.7),rgba(255,255,255,0.35));backdrop-filter:blur(6px)}
-.header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem;max-width:var(--maxw);margin:0 auto;padding:0.65rem}
+/* header */
+.site-header{position:sticky;top:0;z-index:120;background:linear-gradient(180deg,rgba(255,255,255,0.75),rgba(255,255,255,0.35));backdrop-filter:blur(6px)}
+.header-inner{display:flex;align-items:center;justify-content:space-between;gap:1rem}
 .brand{display:flex;align-items:center;gap:.6rem}
-.brand-logo{width:44px;height:44px;object-fit:cover;border-radius:8px}
+.brand-logo{width:44px;height:44px;border-radius:8px}
+.brand-text{font-weight:700}
+.accent{color:var(--accent)}
 .nav-list{display:flex;gap:.6rem;list-style:none;margin:0;padding:0}
 .nav-list a{padding:.5rem .7rem;border-radius:8px}
 
-/* Hero / intro */
+/* hero / intro */
 .intro-section{position:relative;height:100vh;overflow:hidden;display:flex;align-items:center;justify-content:center}
-.intro-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:saturate(0.96) contrast(.94;);z-index:1}
+.intro-bg{position:absolute;inset:0;background-size:cover;background-position:center;filter:contrast(.95) saturate(.98);z-index:1}
+#webgl-hero{position:absolute;inset:0;z-index:2;pointer-events:none}
+#lottie-hero{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;pointer-events:none}
+.pour-stage{position:relative;z-index:6;display:flex;align-items:center;justify-content:center;pointer-events:none;width:100%}
+#glass-svg{width:var(--glass-w);height:calc(var(--glass-w) * 1.4);display:block}
+
+/* intro copy */
 .intro-copy{position:relative;z-index:20;text-align:center;color:#fff;padding:2rem}
 .brand-title{font-size:clamp(2rem,6vw,4rem);margin:0;text-shadow:0 8px 28px rgba(0,0,0,0.45)}
 .lead{color:rgba(255,255,255,0.9);margin-top:.6rem}
 
-/* Pour stage (SVG or Lottie) */
-.pour-stage{position:relative;z-index:10;display:flex;align-items:center;justify-content:center;pointer-events:none;width:100%}
-#glass-svg{width:64vmin;height:92vmin;display:block}
-
-/* Sections */
+/* brands */
 .section{padding:3rem 0}
-.grid{display:grid;gap:1rem}
+.clients{display:flex;flex-wrap:wrap;gap:1.25rem;align-items:center;justify-content:center;padding:1rem 0}
+.client-logo{height:64px;width:auto;display:block}
+.client-tile{display:flex;align-items:center;justify-content:center;padding:.6rem;background:rgba(255,255,255,0.92);border-radius:12px;box-shadow:0 8px 20px rgba(0,0,0,0.06)}
 
-/* Expertise lists */
-.expertise-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
-
-/* Clients */
-.clients{display:flex;flex-wrap:wrap;gap:1rem;align-items:center;justify-content:center;padding:1.25rem 0}
-.client-logo{height:44px;opacity:0.9;filter:grayscale(0.05)}
-
-/* Cards */
-.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:1rem}
+/* card grid */
+.cards-section{padding:2.5rem 0}
+.card-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem}
 .card{background:#fff;border-radius:12px;overflow:hidden;box-shadow:0 12px 30px rgba(20,20,20,0.06)}
-.card-media img{width:100%;height:240px;object-fit:cover;display:block}
+.card-media img{width:100%;height:220px;object-fit:cover;display:block}
 .card-body{padding:0.9rem}
 
 /* footer */
 .site-footer{padding:2rem 0;text-align:center;color:var(--muted)}
 
-/* responsive */
+/* responsiveness */
 @media (max-width:900px){
-  .brand-title{font-size:clamp(1.6rem,6vw,2.4rem)}
-  .card-media img{height:160px}
-  .intro-copy{padding:1rem}
+  .brand-title{font-size:clamp(1.6rem,7vw,2.6rem)}
   #glass-svg{width:86vmin;height:86vmin}
+  .card-media img{height:160px}
+  .client-logo{height:48px}
 }
