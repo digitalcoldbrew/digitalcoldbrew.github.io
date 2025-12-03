@@ -12,97 +12,102 @@
 </head>
 <body>
 
-  <!-- ===== Intro (Pinned, scrubbed) - Animation 1 ===== -->
+  <!-- ===== Intro (Pinned, scrubbed) - luxurious hero (NO GLASS) ===== -->
   <section id="intro" class="intro-section">
-    <div class="intro-inner">
-      <div class="intro-visual">
-        <!-- Simple artistic glass-like hero (you can replace with any SVG/image) -->
-        <div class="glass-visual" aria-hidden="true">
-          <svg viewBox="0 0 800 1200" preserveAspectRatio="xMidYMid slice">
-            <defs><linearGradient id="g" x1="0" x2="0" y1="0" y2="1"><stop offset="0%" stop-color="#b07a44"/><stop offset="100%" stop-color="#5a3728"/></linearGradient></defs>
-            <rect x="0" y="0" width="800" height="1200" fill="url(#g)"></rect>
-          </svg>
-        </div>
-      </div>
+    <div class="intro-bg" aria-hidden="true"
+         style="background-image:url('https://images.unsplash.com/photo-1520975927125-9f5e7db1f0d8?auto=format&fit=crop&w=1800&q=80')">
+      <!-- grain + vignette overlays -->
+      <div class="grain"></div>
+      <div class="vignette"></div>
+      <!-- moving light sweep (animated by GSAP) -->
+      <div class="light-sweep" aria-hidden="true"></div>
+    </div>
 
-      <div class="intro-copy">
-        <h1>Digital ColdBrew</h1>
-        <p class="lead">Beautiful content. Smart results. Scroll to reveal the site.</p>
+    <div class="intro-copy">
+      <div class="container">
+        <h1 class="brand-title">Digital ColdBrew</h1>
+        <p class="lead">Creative production for lifestyle brands — studio, shoots & performance marketing.</p>
       </div>
+    </div>
 
-      <div class="intro-ui">
-        <button id="intro-skip">Skip</button>
-        <div class="hint">Scroll / Swipe</div>
-      </div>
+    <div class="intro-ui">
+      <button id="intro-skip" class="skip">Skip</button>
+      <div class="hint">Scroll / Swipe</div>
     </div>
   </section>
 
-  <!-- ===== Hero with Parallax (Animation 3) ===== -->
+  <!-- ===== Hero with Parallax ===== -->
   <section id="hero" class="hero-section">
     <div class="hero-inner container">
       <div class="hero-media" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1520975927125-9f5e7db1f0d8?auto=format&fit=crop&w=1200&q=60" alt="Hero image">
+        <img src="https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?auto=format&fit=crop&w=1400&q=80" alt="Studio production">
       </div>
       <div class="hero-content">
-        <h2>Creative production for men's fashion</h2>
-        <p class="lead">Studio, shoots & performance marketing all under one roof.</p>
+        <h2>Creative production for lifestyle brands</h2>
+        <p class="lead">Studio, shoots & performance marketing — visuals that convert.</p>
         <a class="cta" href="services.html">Our Services</a>
       </div>
     </div>
   </section>
 
-  <!-- ===== Section Transitions (Animation 2) ===== -->
+  <!-- ===== Section Transitions (fade + move) ===== -->
   <section class="section container fade-section">
     <h3>What we do</h3>
-    <p>Strategic marketing + production. We craft visuals that convert.</p>
+    <p>Strategic marketing + production. We craft visuals that convert across channels and platforms.</p>
   </section>
 
-  <!-- ===== Sticky / pinned product block (Animation 4) ===== -->
+  <!-- ===== Sticky / pinned product block (text panels on scroll) ===== -->
   <section class="sticky-wrap">
     <div class="sticky-inner container">
       <div class="sticky-media">
-        <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=900&q=60" alt="Product">
+        <img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?auto=format&fit=crop&w=1400&q=80" alt="Studio sets">
       </div>
       <div class="sticky-texts">
-        <article class="sticky-panel"> <h3>Studio Sets</h3><p>Six indoor POP sets... details 1.</p> </article>
-        <article class="sticky-panel"> <h3>Photography</h3><p>High quality product & lifestyle shoots... details 2.</p> </article>
-        <article class="sticky-panel"> <h3>Ad Production</h3><p>Short form ads optimized for conversion... details 3.</p> </article>
+        <article class="sticky-panel"> <h3>Studio Sets</h3><p>Six curated in-house sets for product & lifestyle storytelling.</p> </article>
+        <article class="sticky-panel"> <h3>Photography</h3><p>Commerce-ready imagery that converts — product, model & editorial.</p> </article>
+        <article class="sticky-panel"> <h3>Ad Production</h3><p>Short form creative for high-performing media campaigns.</p> </article>
       </div>
     </div>
   </section>
 
-  <!-- ===== Grid Cards (Animation 5 & 6 hover) ===== -->
-  <section class="container cards-section">
+  <!-- ===== Grid Cards (stagger + hover) ===== -->
+  <section class="container cards-section fade-section">
     <h3>Portfolio samples</h3>
     <div class="card-grid">
       <article class="card">
-        <div class="card-media"><img src="https://images.unsplash.com/photo-1526178610992-6f1b6021f9c3?auto=format&fit=crop&w=800&q=60" alt=""></div>
-        <div class="card-body"><h4>Campaign A</h4><p>Short description.</p></div>
+        <div class="card-media"><img src="https://images.unsplash.com/photo-1526178610992-6f1b6021f9c3?auto=format&fit=crop&w=1000&q=80" alt="Campaign A"></div>
+        <div class="card-body"><h4>Campaign A</h4><p>Product & lifestyle creative.</p></div>
       </article>
+
       <article class="card">
-        <div class="card-media"><img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=800&q=60" alt=""></div>
-        <div class="card-body"><h4>Campaign B</h4><p>Short description.</p></div>
+        <div class="card-media"><img src="https://images.unsplash.com/photo-1504198453319-5ce911bafcde?auto=format&fit=crop&w=1000&q=80" alt="Campaign B"></div>
+        <div class="card-body"><h4>Campaign B</h4><p>Ad creative & short films.</p></div>
       </article>
+
       <article class="card">
-        <div class="card-media"><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=800&q=60" alt=""></div>
-        <div class="card-body"><h4>Campaign C</h4><p>Short description.</p></div>
+        <div class="card-media"><img src="https://images.unsplash.com/photo-1541099649105-f69ad21f3246?auto=format&fit=crop&w=1000&q=80" alt="Campaign C"></div>
+        <div class="card-body"><h4>Campaign C</h4><p>Lookbooks & product styling.</p></div>
       </article>
+
       <article class="card">
-        <div class="card-media"><img src="https://images.unsplash.com/photo-1542626991-73c6f9f1c8a8?auto=format&fit=crop&w=800&q=60" alt=""></div>
-        <div class="card-body"><h4>Campaign D</h4><p>Short description.</p></div>
+        <div class="card-media"><img src="https://images.unsplash.com/photo-1542626991-73c6f9f1c8a8?auto=format&fit=crop&w=1000&q=80" alt="Campaign D"></div>
+        <div class="card-body"><h4>Campaign D</h4><p>Social-first content packages.</p></div>
       </article>
     </div>
   </section>
 
-  <!-- ===== Footer & minimal content ===== -->
+  <!-- ===== Footer ===== -->
   <footer class="site-footer container">
     <p>&copy; <span id="year"></span> Digital ColdBrew</p>
   </footer>
 
-  <!-- Keep header/nav consistent across pages (place it last so overlay intro shows first) -->
+  <!-- Header / Nav (kept consistent & simple) -->
   <header class="site-header">
     <div class="container header-inner">
-      <a class="brand" href="index.html"><img src="logo.png" alt="logo" class="brand-logo" onerror="this.style.display='none'"><span class="brand-text">Digital<span class="accent">ColdBrew</span></span></a>
+      <a class="brand" href="index.html">
+        <img src="logo.png" alt="Digital ColdBrew logo" class="brand-logo" onerror="this.style.display='none'">
+        <span class="brand-text">Digital<span class="accent">ColdBrew</span></span>
+      </a>
       <nav class="main-nav">
         <ul class="nav-list">
           <li><a href="index.html">Home</a></li>
