@@ -1,4 +1,4 @@
-// GSAP + ScrollTrigger implementations for animations 1..7
+// GSAP + ScrollTrigger implementations for animations 1..7 (shorter, subtler sweep)
 gsap.registerPlugin(ScrollTrigger);
 
 // small helpers
@@ -6,7 +6,7 @@ const $ = s => document.querySelector(s);
 const $$ = s => Array.from(document.querySelectorAll(s));
 const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
 
-// ---------- 1) Intro pinned scrubbed timeline (luxury hero, light sweep) ----------
+// ---------- 1) Intro pinned scrubbed timeline (shorter duration ~2x viewport) ----------
 (function introTimeline(){
   const intro = $('#intro');
   const bg = document.querySelector('.intro-bg');
@@ -14,37 +14,33 @@ const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
   const hint = document.querySelector('.hint');
   const skipBtn = document.getElementById('intro-skip');
 
-  // timeline: scale bg slightly, move sweep across, brighten mid, then fade out intro
+  // timeline: scale bg lightly, subtle sweep, lighten mid, then fade
   const tl = gsap.timeline({ paused: true });
 
-  // initial micro-scale and soften
-  tl.to(bg, { scale: 1.08, duration: 1.6, ease: "power2.inOut" }, 0);
-  tl.to(sweep, { xPercent: 260, opacity: 0.9, duration: 1.6, ease: "power2.inOut" }, 0.15);
-  tl.to('.brand-title', { y: -16, opacity: 1, duration: 0.9, ease: "power2.out" }, 0.05);
-  tl.to('.lead', { y: -10, opacity: 1, duration: 0.9, ease: "power2.out" }, 0.1);
+  tl.to(bg, { scale: 1.06, duration: 1.2, ease: "power2.inOut" }, 0);
+  tl.to(sweep, { xPercent: 220, opacity: 0.28, duration: 1.2, ease: "power2.inOut" }, 0.1);
+  tl.to('.brand-title', { y: -12, opacity: 1, duration: 0.7, ease: "power2.out" }, 0.05);
+  tl.to('.lead', { y: -8, opacity: 1, duration: 0.7, ease: "power2.out" }, 0.08);
 
-  // slight parallax drift on bg while filling
-  tl.to(bg, { scale: 1.02, duration: 1.2, ease: "power3.inOut" }, 1.3);
+  // small settle
+  tl.to(bg, { scale: 1.02, duration: 0.9, ease: "power3.inOut" }, 1.0);
 
-  // final: fade out intro
-  tl.to(intro, { opacity: 0, duration: 0.8, pointerEvents: 'none', onComplete() {
+  // final: fade out intro quicker (shorter)
+  tl.to(intro, { opacity: 0, duration: 0.6, pointerEvents: 'none', onComplete() {
     intro.style.display = 'none';
-    // ensure site visible
-    const site = document.querySelector('.site') || document.body;
-    // reveal rest of page if you had classes; leave default
-  }}, 2.6);
+  }}, 1.9);
 
-  // Create ScrollTrigger that pins the intro and scrubs the timeline
+  // Create ScrollTrigger that pins the intro and scrubs the timeline (shorter end)
   ScrollTrigger.create({
     animation: tl,
     trigger: intro,
     start: 'top top',
-    end: () => `+=${window.innerHeight * 3}`,
-    scrub: 0.6,
+    end: () => `+=${window.innerHeight * 2}`, // shorter: ~2x viewport
+    scrub: 0.55,
     pin: true,
     anticipatePin: 1,
     onUpdate: self => {
-      if (self.progress > 0.01 && hint) gsap.to(hint, { opacity: 0, duration: 0.25 });
+      if (self.progress > 0.01 && hint) gsap.to(hint, { opacity: 0, duration: 0.18 });
     }
   });
 
@@ -57,13 +53,13 @@ const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
   const sections = gsap.utils.toArray('.fade-section, .cards-section, .hero-section');
   sections.forEach(section=>{
     gsap.from(section, {
-      y: 26,
+      y: 24,
       opacity: 0,
-      duration: 0.9,
+      duration: 0.85,
       ease: 'power2.out',
       scrollTrigger: {
         trigger: section,
-        start: 'top 80%',
+        start: 'top 82%',
         end: 'bottom 40%',
         toggleActions: 'play none none none'
       }
@@ -76,7 +72,7 @@ const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
   const heroImg = document.querySelector('.hero-media img');
   if(!heroImg) return;
   gsap.to(heroImg, {
-    y: -120,
+    y: -100,
     ease: 'none',
     scrollTrigger: {
       trigger: '.hero-section',
@@ -99,7 +95,7 @@ const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
       trigger: '.sticky-wrap',
       start: 'top top',
       end: () => `+=${window.innerHeight * panels.length}`,
-      scrub: 0.6,
+      scrub: 0.55,
       pin: true,
       anticipatePin: 1
     }
@@ -107,19 +103,19 @@ const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
 
   panels.forEach((p,i)=>{
     tl.to(p, { opacity:1, y:0, duration:0.6, ease:'power2.out' });
-    tl.to(p, { opacity:0, duration:0.45, delay:0.6 });
+    tl.to(p, { opacity:0, duration:0.45, delay:0.55 });
   });
 })();
 
 // ---------- 5) Staggered card reveal ----------
 (function cardReveal(){
   const cards = gsap.utils.toArray('.card');
-  gsap.set(cards, { y: 20, opacity: 0 });
+  gsap.set(cards, { y: 18, opacity: 0 });
   gsap.to(cards, {
-    y: 0, opacity: 1, duration: 0.9, ease: 'power2.out', stagger: 0.18,
+    y: 0, opacity: 1, duration: 0.85, ease: 'power2.out', stagger: 0.16,
     scrollTrigger: {
       trigger: '.card-grid',
-      start: 'top 80%',
+      start: 'top 82%',
       end: 'bottom 40%',
       toggleActions: 'play none none none'
     }
@@ -135,10 +131,10 @@ const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
       const r = card.getBoundingClientRect();
       const px = (e.clientX - r.left) / r.width;
       const py = (e.clientY - r.top) / r.height;
-      const rx = (py - 0.5) * 6; // tilt x
-      const ry = (px - 0.5) * -6; // tilt y
+      const rx = (py - 0.5) * 5.5;
+      const ry = (px - 0.5) * -5.5;
       card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
-      if(img) img.style.transform = 'scale(1.06)';
+      if(img) img.style.transform = 'scale(1.05)';
     });
     card.addEventListener('mouseleave', ()=>{
       card.style.transform = '';
@@ -157,7 +153,7 @@ const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
     end: 'bottom top',
     scrub: true,
     onUpdate: self => {
-      const r = (self.progress - 0.5) * 6; // -3..3deg
+      const r = (self.progress - 0.5) * 5;
       container.style.transform = `rotateX(${r/3}deg) rotateZ(${r}deg)`;
     }
   });
