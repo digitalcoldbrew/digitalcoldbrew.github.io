@@ -9,22 +9,56 @@
   <!-- GSAP + ScrollTrigger -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-  <!-- lottie-web -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/bodymovin/5.9.6/lottie.min.js"></script>
 </head>
 <body>
 
-  <!-- ===== Intro (Pinned, scrubbed) - luxurious hero (shorter & subtler) ===== -->
+  <!-- ===== INTRO with SVG GLASS + POUR (pinned, scrubbed) ===== -->
   <section id="intro" class="intro-section">
     <div class="intro-bg" aria-hidden="true"
-         style="background-image:url('https://images.unsplash.com/photo-1491553895911-0055eca6402d?auto=format&fit=crop&w=1800&q=80')">
+         style="background-image:url('https://images.unsplash.com/photo-1533777324565-a040eb52fac2?auto=format&fit=crop&w=1800&q=80')">
       <div class="grain"></div>
       <div class="vignette"></div>
-      <div class="light-sweep" aria-hidden="true"></div>
     </div>
 
-    <!-- Lottie spill container (full-screen overlay inside intro) -->
-    <div id="lottie-spill" aria-hidden="true"></div>
+    <!-- SVG glass + liquid + pour stream -->
+    <div id="pour-stage" class="pour-stage" aria-hidden="true">
+      <svg id="glass-svg" viewBox="0 0 600 1000" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <clipPath id="glassClip">
+            <path id="glassPath" d="M150 40 Q140 20 150 10 L450 10 Q460 20 450 40 L420 870 Q420 930 300 950 Q180 930 180 870 Z"/>
+          </clipPath>
+          <linearGradient id="coffeeGrad" x1="0" x2="0" y1="0" y2="1">
+            <stop offset="0%" stop-color="#7a4228"/>
+            <stop offset="100%" stop-color="#341d12"/>
+          </linearGradient>
+        </defs>
+
+        <!-- subtle glass outline -->
+        <path d="M150 40 Q140 20 150 10 L450 10 Q460 20 450 40 L420 870 Q420 930 300 950 Q180 930 180 870 Z"
+              fill="none" stroke="rgba(255,255,255,0.65)" stroke-width="4"/>
+
+        <!-- liquid group: mask so it fills glass area only -->
+        <g clip-path="url(#glassClip)">
+          <!-- base (empty) -->
+          <rect id="liquid-rect" x="-50" y="950" width="700" height="1200" fill="url(#coffeeGrad)"></rect>
+          <!-- waves (three layered subtle waves for realism) -->
+          <g id="waves" transform="translate(0,900)">
+            <path id="waveA" d="M-20 40 C120 0,240 80,360 40 C480 0,600 80,720 40 L720 120 L-20 120 Z" fill="rgba(255,255,255,0.03)"/>
+            <path id="waveB" d="M-20 60 C120 20,240 100,360 60 C480 20,600 100,720 60 L720 140 L-20 140 Z" fill="rgba(0,0,0,0.06)"/>
+          </g>
+        </g>
+
+        <!-- pour stream (from top-right) -->
+        <g id="pour-stream" opacity="0" transform="translate(420,-10)">
+          <path id="stream" d="M0 0 C6 60 14 130 10 200" stroke="#3e2618" stroke-width="16" stroke-linecap="round" fill="none" stroke-linejoin="round" />
+          <circle id="drop" cx="10" cy="200" r="8" fill="#2e1610" />
+        </g>
+
+        <!-- splash particles group -->
+        <g id="splashes" opacity="0"></g>
+
+      </svg>
+    </div>
 
     <div class="intro-copy">
       <div class="container">
@@ -39,11 +73,11 @@
     </div>
   </section>
 
-  <!-- ===== Hero with Parallax (Moody swapped) ===== -->
+  <!-- ===== HERO (parallax) ===== -->
   <section id="hero" class="hero-section">
     <div class="hero-inner container">
       <div class="hero-media" aria-hidden="true">
-        <img src="https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=1800&q=90" alt="Creative desk / production planning">
+        <img src="https://images.unsplash.com/photo-1505678261036-a3fcc5e884ee?auto=format&fit=crop&w=1800&q=90" alt="Creative desk / production planning">
       </div>
       <div class="hero-content">
         <h2>Creative production for lifestyle brands</h2>
@@ -53,7 +87,7 @@
     </div>
   </section>
 
-  <!-- ===== Sections & content (unchanged structure) ===== -->
+  <!-- ===== CONTENT (unchanged structure) ===== -->
   <section class="section container fade-section">
     <h3>What we do</h3>
     <p>Strategic marketing + production. We craft visuals that convert across channels and platforms.</p>
@@ -72,33 +106,34 @@
     </div>
   </section>
 
+  <!-- ===== Portfolio samples (4K, relevant production shots) ===== -->
   <section class="container cards-section fade-section">
     <h3>Portfolio samples</h3>
     <div class="card-grid">
       <article class="card">
         <div class="card-media">
-          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=3840&q=80" alt="Campaign A - Production set (4K)">
+          <img src="https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=3840&q=80" alt="Campaign A - Production set">
         </div>
         <div class="card-body"><h4>Campaign A</h4><p>Production house / set photography.</p></div>
       </article>
 
       <article class="card">
         <div class="card-media">
-          <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=3840&q=80" alt="Campaign B - Studio lighting (4K)">
+          <img src="https://images.unsplash.com/photo-1496307042754-b4aa456c4a2d?auto=format&fit=crop&w=3840&q=80" alt="Campaign B - Studio lighting">
         </div>
         <div class="card-body"><h4>Campaign B</h4><p>Studio lighting & styling shots.</p></div>
       </article>
 
       <article class="card">
         <div class="card-media">
-          <img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=3840&q=80" alt="Campaign C - Lifestyle lookbook (4K)">
+          <img src="https://images.unsplash.com/photo-1509395176047-4a66953fd231?auto=format&fit=crop&w=3840&q=80" alt="Campaign C - Lookbook">
         </div>
         <div class="card-body"><h4>Campaign C</h4><p>Lookbook & editorial imagery.</p></div>
       </article>
 
       <article class="card">
         <div class="card-media">
-          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=3840&q=80" alt="Campaign D - Social content (4K)">
+          <img src="https://images.unsplash.com/photo-1500534314209-a25ddb2bd429?auto=format&fit=crop&w=3840&q=80" alt="Campaign D - Social content">
         </div>
         <div class="card-body"><h4>Campaign D</h4><p>Social-first short-form content packages.</p></div>
       </article>
