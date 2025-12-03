@@ -1,30 +1,135 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>Digital ColdBrew</title>
 
   <link rel="stylesheet" href="styles.css" />
 
-  <!-- GSAP + ScrollTrigger -->
+  <!-- GSAP (we keep available for later animations/sections) -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <!-- Three.js -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
+  <!-- Three.js (reliable CDN) -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
 
-  <!-- REQUIRED SHADER TAGS (EMPTY BUT MANDATORY) -->
-  <script id="vertexShader" type="x-shader/x-vertex"></script>
-  <script id="fragmentShader" type="x-shader/x-fragment"></script>
+  <!--
+    EMBEDDED SHADERS: Putting them in the HTML avoids fetch/MIME issues on GitHub Pages.
+    script.js will look here first; if empty it will fall back to fetching .vert/.frag files
+  -->
+  <script id="vertexShader" type="x-shader/x-vertex">
+    // Simple fullscreen vertex shader
+    precision highp float;
+    attribute vec3 position;
+    void main() {
+      gl_Position = vec4(position, 1.0);
+    }
+  </script>
+
+  <script id="fragmentShader" type="x-shader/x-fragment">
+    precision highp float;
+    uniform float u_time;
+    uniform vec2 u_resolution;
+    uniform vec2 u_mouse;
+    uniform float u_scroll;
+
+    // 2D noise - small, fast
+    float hash(vec2 p) {
+      p = fract(p * vec2(123.34, 456.21));
+      p += dot(p, p + 45.32);
+      return fract(p.x * p.y);
+    }
+
+    float noise(in vec2 p) {
+      vec2 i = floor(p);
+      vec2 f = fract(p);
+      // four corners
+      float a = hash(i);
+      float b = hash(i + vec2(1.0, 0.0));
+      float c = hash(i + vec2(0.0, 1.0));
+      float d = hash(i + vec2(1.0, 1.0));
+      vec2 u = f * f * (3.0 - 2.0 * f);
+      return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
+    }
+
+    // fbm for smoother waves
+    float fbm(vec2 p) {
+      float v = 0.0;
+      float a = 0.5;
+      for (int i = 0; i < 5; i++) {
+        v += a * noise(p);
+        p *= 2.0;
+        a *= 0.5;
+      }
+      return v;
+    }
+
+    void main() {
+      vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+      // center-correct aspect
+      vec2 center = uv - 0.5;
+      center.x *= u_resolution.x / u_resolution.y;
+
+      // interactive ripple center: mouse (normalized)
+      vec2 mouse = u_mouse;
+      // if mouse not set (0,0) then fallback to center
+      if (mouse.x < 0.001 && mouse.y < 0.001) {
+        mouse = vec2(0.5, 0.5);
+      }
+      vec2 m = mouse - vec2(0.0, 1.0) + vec2(0.0); // we'll sample differently below
+      // convert mouse to shader uv-space like gl_FragCoord normalized
+      vec2 mouseUV = vec2(mouse.x, mouse.y);
+
+      // scrolling influence (makes waves stronger when user scrolls)
+      float scrollInfluence = clamp(u_scroll * 0.8, 0.0, 1.0);
+
+      // time
+      float t = u_time * 0.8;
+
+      // base ripples from mouse position
+      vec2 diff = uv - mouseUV;
+      float dist = length(diff);
+      float ripple = sin(dist * 40.0 - t * 6.0) * exp(-dist * 6.0);
+
+      // add broader fluid motion with fbm
+      float v = fbm((uv * 3.0) + vec2(t * 0.12, t * -0.08));
+      float v2 = fbm((uv * 6.0) - vec2(t * 0.06, t * 0.04));
+      float field = mix(v, v2, 0.5);
+
+      // combine ripple + field + scroll
+      float flow = ripple * 0.9 + field * 0.35 + scrollInfluence * 0.25;
+
+      // color palette: coffee tones (lighter milk + dark espresso)
+      vec3 milk = vec3(0.94, 0.90, 0.84);     // background warm cream
+      vec3 lightCoffee = vec3(0.69, 0.49, 0.34);
+      vec3 darkCoffee = vec3(0.20, 0.10, 0.06);
+
+      // compute smooth blend factor
+      float blend = smoothstep(-0.25, 0.6, flow);
+
+      // use flow (with slight offset) to blend between milk and coffee
+      vec3 color = mix(milk, mix(lightCoffee, darkCoffee, clamp(flow*1.2,0.0,1.0)), blend);
+
+      // subtle surface sheen: add small specular-ish highlight using noise
+      float spec = 0.0;
+      spec += 0.02 * sin((uv.y + t*0.6) * 30.0) * (1.0 - dist);
+      color += spec;
+
+      // gamma
+      color = pow(color, vec3(0.95));
+
+      gl_FragColor = vec4(color, 1.0);
+    }
+  </script>
 
 </head>
 <body>
 
-  <!-- FULL PAGE COFFEE FLUID WEBGL -->
+  <!-- Full-page WebGL canvas -->
   <canvas id="coffee-canvas"></canvas>
 
-  <!-- WEBSITE CONTENT ABOVE WEBGL -->
+  <!-- Content above canvas -->
   <header class="nav">
     <div class="brand">Digital <span>ColdBrew</span></div>
     <nav>
@@ -36,42 +141,39 @@
     </nav>
   </header>
 
-  <!-- HERO SECTION -->
-  <section id="home" class="hero">
-    <h1>Digital ColdBrew</h1>
-    <p>Creative production for lifestyle brands — studio, shoots & performance marketing.</p>
-  </section>
+  <main>
+    <section id="home" class="hero">
+      <h1>Digital ColdBrew</h1>
+      <p>Creative production for lifestyle brands — studio, shoots & performance marketing.</p>
+    </section>
 
-  <!-- ABOUT -->
-  <section id="about" class="content">
-    <h2>Who we are</h2>
-    <p>We craft campaigns that blend creativity, storytelling and measurable performance.</p>
-  </section>
+    <section id="about" class="content">
+      <h2>Who we are</h2>
+      <p>We craft campaigns that blend creativity, storytelling and measurable performance.</p>
+    </section>
 
-  <!-- SERVICES -->
-  <section id="services" class="content">
-    <h2>Services</h2>
-    <ul>
-      <li>Social Media Marketing</li>
-      <li>Brand Strategy</li>
-      <li>Product Shoot & Video Production</li>
-      <li>Performance Marketing</li>
-    </ul>
-  </section>
+    <section id="services" class="content">
+      <h2>Services</h2>
+      <ul>
+        <li>Social Media Marketing</li>
+        <li>Brand Strategy</li>
+        <li>Product Shoot & Video Production</li>
+        <li>Performance Marketing</li>
+      </ul>
+    </section>
 
-  <!-- CASE STUDIES -->
-  <section id="case" class="content">
-    <h2>Case Studies</h2>
-    <p>Coming soon — with real brand campaigns and detailed results.</p>
-  </section>
+    <section id="case" class="content">
+      <h2>Case Studies</h2>
+      <p>Coming soon — with real brand campaigns and detailed results.</p>
+    </section>
 
-  <!-- CONTACT -->
-  <section id="contact" class="content">
-    <h2>Contact</h2>
-    <p>Email: contact@digitalcoldbrew.com</p>
-  </section>
+    <section id="contact" class="content">
+      <h2>Contact</h2>
+      <p>Email: contact@digitalcoldbrew.com</p>
+    </section>
+  </main>
 
+  <!-- final script: robust loader will use the embedded shaders if present -->
   <script src="script.js"></script>
-
 </body>
 </html>
