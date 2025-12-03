@@ -18,14 +18,18 @@
     EMBEDDED SHADERS: Putting them in the HTML avoids fetch/MIME issues on GitHub Pages.
     script.js will look here first; if empty it will fall back to fetching .vert/.frag files
   -->
-  <script id="vertexShader" type="x-shader/x-vertex">
-    // Simple fullscreen vertex shader
-    precision highp float;
-    attribute vec3 position;
-    void main() {
-      gl_Position = vec4(position, 1.0);
-    }
-  </script>
+<script id="vertexShader" type="x-shader/x-vertex">
+  // Simple fullscreen vertex shader (DO NOT redeclare 'position' — Three.js already provides it)
+  #ifdef GL_ES
+  precision highp float;
+  #endif
+
+  void main() {
+    // 'position' is provided by Three.js — use it directly
+    gl_Position = vec4(position, 1.0);
+  }
+</script>
+
 
   <script id="fragmentShader" type="x-shader/x-fragment">
     precision highp float;
