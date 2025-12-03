@@ -1,121 +1,149 @@
-// FALLBACK script.js
-// Detect GSAP/ScrollTrigger and fallback to native animation if missing.
-// Paste this replacing your current script.js and commit to GitHub.
+// GSAP + ScrollTrigger animations implementing 1..7
+gsap.registerPlugin(ScrollTrigger);
 
-(function(){
-  const hasGSAP = typeof window.gsap !== 'undefined';
-  const hasST = typeof window.ScrollTrigger !== 'undefined';
-  console.log('FALLBACK: hasGSAP=', hasGSAP, 'hasScrollTrigger=', hasST);
+// helper
+const $ = sel => document.querySelector(sel);
+const $$ = sel => Array.from(document.querySelectorAll(sel));
+const year = $('#year'); if(year) year.textContent = new Date().getFullYear();
 
-  // Helper to reveal site (same behavior used by GSAP version)
-  function revealSiteNow() {
-    const intro = document.getElementById('intro');
-    const site = document.getElementById('site');
-    if(!site) return;
-    site.classList.remove('hidden');
-    site.classList.add('visible');
-    if(intro){
-      intro.style.transition = 'opacity .8s ease';
-      intro.style.opacity = '0';
-      setTimeout(()=> { try{ intro.style.display='none'; }catch(e){} }, 900);
-    }
-  }
+// 1) Intro pinned scrubbed timeline (fullscreen)
+(function introTimeline(){
+  const tl = gsap.timeline({ paused:true });
+  // subtle scale/tilt + "liquid rise" substitute by scaling the rect inside .glass-visual
+  tl.to('.glass-visual svg', { scale: 1.05, duration: 1.2, transformOrigin: "50% 50%", ease: "power2.inOut" }, 0);
+  tl.to('.glass-visual svg rect', { attr:{height:1000}, duration: 2.2, ease: "power3.inOut" }, 0.2);
+  tl.to('.intro-copy h1, .intro-copy .lead', { y:-18, opacity:1, stagger:0.12, duration:1, ease:"power2.out" }, 0);
 
-  // If GSAP present, do nothing here (the GSAP script should run as before)
-  if(hasGSAP && hasST){
-    console.log('FALLBACK: GSAP + ScrollTrigger present, falling back to original scripts.');
-    return;
-  }
+  // final: shrink overlay and reveal site
+  tl.to('#intro', { opacity: 0, duration: 0.9, pointerEvents: 'none', onComplete() {
+    document.getElementById('intro').style.display='none';
+    document.getElementById('site').classList.remove('hidden');
+    document.getElementById('site').classList.add('visible');
+  }}, 2.5);
 
-  // If we're here, GSAP/ScrollTrigger are missing. Provide a native fallback:
-  console.warn('FALLBACK: GSAP or ScrollTrigger not found. Running native fallback animation.');
-
-  // Basic native pour: we animate the SVG group "liquid-layer" translateY from start->end
-  const liquidLayer = document.getElementById('liquid-layer');
-  const pourStream = document.getElementById('pour-stream');
-  const drops = document.getElementById('drops');
-  const hint = document.querySelector('.hint') || null;
-  let progress = 0; // 0..1
-  const TARGET_STEPS = 60; // steps to fill (approx). Increase for slower pour.
-  let steps = 0;
-
-  // If elements missing, just reveal site
-  if(!liquidLayer){
-    console.warn('FALLBACK: liquid-layer not found; revealing site.');
-    revealSiteNow();
-    return;
-  }
-
-  // Initialize: parse initial transform if present
-  // We expect initial transform translate(0,820) in SVG; use 820 as startY.
-  const START_Y = 820, END_Y = 0;
-
-  function setLiquid(p) {
-    const curY = START_Y - (START_Y - END_Y) * p;
-    try {
-      liquidLayer.setAttribute('transform', `translate(0, ${curY})`);
-    } catch(e) {}
-    if(p > 0.02 && pourStream) pourStream.style.opacity = 1; else if(p<=0.02 && pourStream) pourStream.style.opacity = 0;
-    if(p > 0.12 && drops) drops.style.opacity = 1; else if(drops) drops.style.opacity = 0;
-  }
-
-  // Increment on wheel or touch gestures
-  function inc(delta=1) {
-    steps = Math.min(TARGET_STEPS, steps + Math.abs(delta));
-    progress = Math.min(1, steps / TARGET_STEPS);
-    setLiquid(progress);
-    if(hint) hint.style.opacity = 0;
-    if(progress >= 1){
-      // finish and reveal site
-      setTimeout(revealSiteNow, 400);
-      // remove listeners
-      window.removeEventListener('wheel', wheelHandler);
-      window.removeEventListener('touchmove', touchHandler);
-      window.removeEventListener('pointermove', pointerHandler);
-    }
-  }
-
-  function wheelHandler(e){
-    inc(Math.max(1, Math.round(Math.abs(e.deltaY)/12)));
-  }
-  let lastTouchY = null;
-  function touchHandler(e){
-    if(!e.touches || !e.touches.length) return;
-    const y = e.touches[0].clientY;
-    if(lastTouchY == null){ lastTouchY = y; return; }
-    const dy = lastTouchY - y;
-    if(dy > 0) inc(Math.round(dy/15));
-    lastTouchY = y;
-  }
-  function pointerHandler(e){
-    // support drag on desktop
-    if(e.pressure === 0) return;
-    inc(1);
-  }
-
-  // minimal animation loop to ease into positions
-  function animateLoop(){
-    // if progress is 1, stop
-    if(progress >= 1) return;
-    // we don't do continuous RAF; we update on gestures
-    requestAnimationFrame(animateLoop);
-  }
-  animateLoop();
-
-  // Attach listeners
-  window.addEventListener('wheel', wheelHandler, { passive: true });
-  window.addEventListener('touchmove', touchHandler, { passive: true });
-  window.addEventListener('pointermove', pointerHandler, { passive: true });
-
-  // Also provide skip via spacebar
-  window.addEventListener('keydown', (e)=> {
-    if(e.key === ' ' || e.key.toLowerCase() === 's') {
-      steps = TARGET_STEPS; progress = 1;
-      setLiquid(1);
-      revealSiteNow();
-    }
+  ScrollTrigger.create({
+    animation: tl,
+    trigger: '#intro',
+    start: 'top top',
+    end: () => `+=${window.innerHeight * 3}`, // ~3 screen heights
+    scrub: 0.6,
+    pin: true,
+    anticipatePin: 1
   });
 
-  // Log helpful guidance for debugging
-  console.info('FALLBACK: If you want the GSAP version, check network console for blocked CDN or 404 for gsap/ScrollTrigger. Type in console: typeof gsap, typeof ScrollTrigger');
+  // skip
+  const skip = document.getElementById('intro-skip');
+  if(skip) skip.addEventListener('click', ()=> tl.progress(1));
 })();
+
+// 2) Fade-in sections on scroll (global)
+$$('.fade-section, .cards-section, .hero-section').forEach(section => {
+  gsap.from(section, {
+    scrollTrigger: {
+      trigger: section,
+      start: 'top 80%',
+      end: 'bottom 40%',
+      toggleActions: 'play none none none'
+    },
+    y: 26,
+    opacity: 0,
+    duration: 0.9,
+    ease: 'power2.out'
+  });
+});
+
+// 3) Hero parallax: image moves slower than text
+(function heroParallax(){
+  const heroImg = document.querySelector('.hero-media img');
+  if(!heroImg) return;
+  gsap.to(heroImg, {
+    y: -120,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.hero-section',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 0.6
+    }
+  });
+})();
+
+// 4) Sticky/pinned product block (text panels on scroll)
+(function stickyPanels(){
+  const sticky = document.querySelector('.sticky-wrap');
+  if(!sticky) return;
+  const panels = gsap.utils.toArray('.sticky-panel');
+  panels.forEach((panel,i) => panel.style.opacity = 0);
+
+  const tl = gsap.timeline({
+    scrollTrigger: {
+      trigger: '.sticky-wrap',
+      start: 'top top',
+      end: () => `+=${window.innerHeight * panels.length}`,
+      scrub: 0.6,
+      pin: true,
+      anticipatePin: 1
+    }
+  });
+  // For each panel: fade it in, then move to next
+  panels.forEach((p, i) => {
+    tl.to(p, { opacity:1, y:0, duration:0.6, ease:'power2.out' });
+    tl.to(p, { opacity:0, duration:0.45, delay:0.6 });
+  });
+})();
+
+// 5) Staggered card reveal on scroll
+(function cardReveal(){
+  const cards = gsap.utils.toArray('.card');
+  gsap.set(cards, { y: 20, opacity: 0 });
+  gsap.to(cards, {
+    y:0, opacity:1, duration:0.9, ease:'power2.out', stagger:0.18,
+    scrollTrigger: {
+      trigger: '.card-grid',
+      start: 'top 80%',
+      end: 'bottom 40%',
+      toggleActions: 'play none none none'
+    }
+  });
+})();
+
+// 6) Hover animations for cards are in CSS (scale & image zoom). For pointer tilt effect (optional):
+(function pointerTilt(){
+  const cards = $$('.card');
+  cards.forEach(card => {
+    const img = card.querySelector('img');
+    card.addEventListener('mousemove', (e) => {
+      const r = card.getBoundingClientRect();
+      const px = (e.clientX - r.left) / r.width;
+      const py = (e.clientY - r.top) / r.height;
+      const rx = (py - 0.5) * 6;
+      const ry = (px - 0.5) * -6;
+      card.style.transform = `perspective(800px) rotateX(${rx}deg) rotateY(${ry}deg) translateZ(0)`;
+      if(img) img.style.transform = 'scale(1.06)';
+    });
+    card.addEventListener('mouseleave', ()=> {
+      card.style.transform = '';
+      if(img) img.style.transform = '';
+    });
+  });
+})();
+
+// 7) Scroll-linked 3D tilt for hero & sections (subtle)
+(function subtleTilt(){
+  const container = document.querySelector('.hero-section');
+  if(!container) return;
+  ScrollTrigger.create({
+    trigger: container,
+    start: 'top bottom',
+    end: 'bottom top',
+    scrub: true,
+    onUpdate: self => {
+      const r = (self.progress - 0.5) * 6; // -3..3deg
+      container.style.transform = `rotateX(${r/3}deg) rotateZ(${r}deg)`;
+    }
+  });
+})();
+
+// refresh ScrollTrigger on load/resize
+window.addEventListener('load', ()=> ScrollTrigger.refresh());
+window.addEventListener('resize', ()=> ScrollTrigger.refresh());
