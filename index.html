@@ -1,47 +1,16 @@
 <!doctype html>
 <html lang="en">
-  
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>DigitalColdBrew — Creative Digital Marketing & Web Animations</title>
 
-  <link rel="stylesheet" href="styles.css">
-
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
-
-  <!-- THREE.JS (OFFICIAL CDN, ALWAYS WORKS) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-
-  <!-- HELPERS -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/controls/OrbitControls.js"></script>
-
-  <!-- GSAP -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
-
-  <!-- LOTTIE -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
-</head>
+  <meta name="description" content="DigitalColdBrew — creative digital marketing agency: web animations, SEO, performance ads, brand strategy." />
+  <meta name="keywords" content="digital marketing, web animations, SEO, branding, creative agency" />
 
   <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
-
-  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
-
-  <!-- THREE.JS core and helpers (MUST load before script.js) -->
-  <script src="https://unpkg.com/three@0.164.0/build/three.min.js"></script>
-  <script src="https://unpkg.com/three@0.164.0/examples/js/controls/OrbitControls.js"></script>
-  <script src="https://unpkg.com/three@0.164.0/examples/js/loaders/GLTFLoader.js"></script>
-
-  <!-- GSAP -->
-  <script src="https://unpkg.com/gsap@3.12.0/dist/gsap.min.js"></script>
-  <script src="https://unpkg.com/gsap@3.12.0/dist/ScrollTrigger.min.js"></script>
-
-  <!-- Lottie (optional; script present but will be used only if file exists) -->
-  <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
 </head>
 
 <body>
@@ -93,7 +62,6 @@
     <section id="services" class="section">
       <h2 class="section-title">What We Do</h2>
       <p class="section-sub">Marketing. Animation. Branding.</p>
-
       <div class="cards">
         <div class="service-card"><h3>Web Animations</h3><p>Creative 3D & motion experiences.</p></div>
         <div class="service-card"><h3>SEO Strategy</h3><p>Rank, attract & convert.</p></div>
@@ -104,22 +72,10 @@
 
     <section id="work" class="section alt">
       <h2 class="section-title">Selected Work</h2>
-
       <div class="portfolio">
-        <div class="project">
-          <div class="project-thumb">A</div>
-          <div class="project-meta"><h4>Brand Project</h4><p>Significant traffic uplift</p></div>
-        </div>
-
-        <div class="project">
-          <div class="project-thumb">B</div>
-          <div class="project-meta"><h4>E-commerce</h4><p>Conversion improvements</p></div>
-        </div>
-
-        <div class="project">
-          <div class="project-thumb">C</div>
-          <div class="project-meta"><h4>Lead Gen</h4><p>Lower CPA</p></div>
-        </div>
+        <div class="project"><div class="project-thumb">A</div><div class="project-meta"><h4>Brand Project</h4><p>Significant uplift</p></div></div>
+        <div class="project"><div class="project-thumb">B</div><div class="project-meta"><h4>E-commerce</h4><p>Conversion improvements</p></div></div>
+        <div class="project"><div class="project-thumb">C</div><div class="project-meta"><h4>Lead Gen</h4><p>Lower CPA</p></div></div>
       </div>
     </section>
 
@@ -143,7 +99,6 @@
 
     <section id="contact" class="section contact">
       <h2 class="section-title">Let’s Build Something</h2>
-
       <div class="contact-grid">
         <form class="contact-form" action="mailto:hello@digitalcoldbrew.example" method="post" enctype="text/plain">
           <input name="name" placeholder="Name" required />
@@ -151,26 +106,34 @@
           <textarea name="message" placeholder="Tell us about your project..." rows="5" required></textarea>
           <button class="btn primary" type="submit">Send Message</button>
         </form>
-
         <div class="contact-info">
           <h4>Email</h4>
           <p><a href="mailto:hello@digitalcoldbrew.example">hello@digitalcoldbrew.example</a></p>
           <h4>Location</h4>
-          <p>Surat, Gujarat, India</p>
+          <p>New Delhi, India</p>
         </div>
       </div>
     </section>
   </main>
 
-  <footer class="site-footer">
-    © DigitalColdBrew — All Rights Reserved
-  </footer>
+  <footer class="site-footer">© DigitalColdBrew — All Rights Reserved</footer>
 
-  <!-- script.js MUST be loaded last -->
+  <!-- SCRIPTS: load libraries here (bottom of body) in this exact order -->
+  <!-- Three.js core -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+
+  <!-- Three helpers (use the non-module versions) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/controls/OrbitControls.js"></script>
+
+  <!-- GSAP -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <!-- Lottie -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+
+  <!-- Your script must be last -->
   <script src="script.js"></script>
-</body>
-</html>
-
-<script src="script.js"></script>
 </body>
 </html>
