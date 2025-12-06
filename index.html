@@ -5,17 +5,17 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>DigitalColdBrew — Creative Digital Marketing & Web Animations</title>
 
-  <meta name="description" content="DigitalColdBrew — creative digital marketing agency specializing in animations, SEO, ads & brand design." />
+  <meta name="description" content="DigitalColdBrew — creative digital marketing agency: web animations, SEO, performance ads, brand strategy." />
   <meta name="keywords" content="digital marketing, web animations, SEO, branding, creative agency" />
   <meta name="author" content="DigitalColdBrew">
 
-  <!-- STYLES -->
+  <!-- Styles -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- FONTS -->
+  <!-- Font -->
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
 
-  <!-- THREE.JS (must load BEFORE script.js) -->
+  <!-- THREE.JS core and helpers (MUST load before script.js) -->
   <script src="https://unpkg.com/three@0.164.0/build/three.min.js"></script>
   <script src="https://unpkg.com/three@0.164.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://unpkg.com/three@0.164.0/examples/js/loaders/GLTFLoader.js"></script>
@@ -24,129 +24,133 @@
   <script src="https://unpkg.com/gsap@3.12.0/dist/gsap.min.js"></script>
   <script src="https://unpkg.com/gsap@3.12.0/dist/ScrollTrigger.min.js"></script>
 
-  <!-- LOTTIE -->
+  <!-- Lottie (optional; script present but will be used only if file exists) -->
   <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
-
 </head>
 
 <body>
+  <header id="hero-wrap">
+    <canvas id="hero-canvas"></canvas>
 
-<header id="hero-wrap">
-  <canvas id="hero-canvas"></canvas>
+    <div class="overlay">
+      <nav class="topnav">
+        <div class="brand">DigitalColdBrew</div>
+        <div class="nav-links">
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#pricing">Packages</a>
+          <a href="#contact" class="cta">Get a Quote</a>
+        </div>
+      </nav>
 
-  <div class="overlay">
-    <nav class="topnav">
-      <div class="brand">DigitalColdBrew</div>
-      <div class="nav-links">
-        <a href="#services">Services</a>
-        <a href="#work">Work</a>
-        <a href="#pricing">Packages</a>
-        <a href="#contact" class="cta">Get a Quote</a>
-      </div>
-    </nav>
+      <section class="hero">
+        <div class="hero-left">
+          <h1><span class="tag">Creative Studio</span><br>We design brands & campaigns that convert.</h1>
+          <p class="sub">Web animations • SEO • Performance Ads • Branding</p>
 
-    <section class="hero">
-      <div class="hero-left">
-        <h1><span class="tag">Creative Studio</span><br>We design brands & campaigns that convert.</h1>
-        <p class="sub">Web animations • SEO • Performance Ads • Branding</p>
+          <div class="hero-actions">
+            <a href="#work" class="btn primary">See Work</a>
+            <a href="#contact" class="btn ghost">Start Project</a>
+          </div>
 
-        <div class="hero-actions">
-          <a href="#work" class="btn primary">See Work</a>
-          <a href="#contact" class="btn ghost">Start Project</a>
+          <ul class="hero-bullets">
+            <li><strong>UI/UX</strong> that boosts conversions</li>
+            <li><strong>SEO + Content</strong> for organic growth</li>
+            <li><strong>Performance Ads</strong> with measurable ROI</li>
+          </ul>
         </div>
 
-        <ul class="hero-bullets">
-          <li><strong>UI/UX</strong> with high conversions</li>
-          <li><strong>SEO + Content</strong> for organic growth</li>
-          <li><strong>Performance Ads</strong> with measurable ROI</li>
-        </ul>
-      </div>
-
-      <div class="hero-right">
-        <div id="lottie-placeholder" class="floating">
-          <div class="badge">DCB</div>
-          <div class="meta">
-            <h4>DigitalColdBrew</h4>
-            <span>Creative Agency</span>
+        <div class="hero-right">
+          <div id="lottie-placeholder" class="floating">
+            <div class="badge">DCB</div>
+            <div class="meta">
+              <h4>DigitalColdBrew</h4>
+              <span>Creative Agency</span>
+            </div>
           </div>
+        </div>
+      </section>
+    </div>
+  </header>
+
+  <main>
+    <section id="services" class="section">
+      <h2 class="section-title">What We Do</h2>
+      <p class="section-sub">Marketing. Animation. Branding.</p>
+
+      <div class="cards">
+        <div class="service-card"><h3>Web Animations</h3><p>Creative 3D & motion experiences.</p></div>
+        <div class="service-card"><h3>SEO Strategy</h3><p>Rank, attract & convert.</p></div>
+        <div class="service-card"><h3>Performance Ads</h3><p>ROI-driven campaigns.</p></div>
+        <div class="service-card"><h3>Brand Identity</h3><p>Visual systems & storytelling.</p></div>
+      </div>
+    </section>
+
+    <section id="work" class="section alt">
+      <h2 class="section-title">Selected Work</h2>
+
+      <div class="portfolio">
+        <div class="project">
+          <div class="project-thumb">A</div>
+          <div class="project-meta"><h4>Brand Project</h4><p>Significant traffic uplift</p></div>
+        </div>
+
+        <div class="project">
+          <div class="project-thumb">B</div>
+          <div class="project-meta"><h4>E-commerce</h4><p>Conversion improvements</p></div>
+        </div>
+
+        <div class="project">
+          <div class="project-thumb">C</div>
+          <div class="project-meta"><h4>Lead Gen</h4><p>Lower CPA</p></div>
         </div>
       </div>
     </section>
-  </div>
-</header>
 
-<main>
+    <section id="pricing" class="section">
+      <h2 class="section-title">Packages</h2>
+      <div class="pricing-grid">
+        <div class="price-card"><h3>Starter</h3><p>₹15,000</p></div>
+        <div class="price-card recommended"><h3>Growth</h3><p>₹45,000</p></div>
+        <div class="price-card"><h3>Scale</h3><p>Custom</p></div>
+      </div>
+    </section>
 
-<section id="services" class="section">
-  <h2 class="section-title">What We Do</h2>
-  <p class="section-sub">Marketing. Animation. Branding.</p>
+    <section id="team" class="section alt">
+      <h2 class="section-title">Team</h2>
+      <div class="team-grid">
+        <div class="member"><div class="avatar">F</div><strong>Founder</strong><span>Founder</span></div>
+        <div class="member"><div class="avatar">C</div><strong>Creative Lead</strong><span>Creative Lead</span></div>
+        <div class="member"><div class="avatar">P</div><strong>Performance Lead</strong><span>Performance Lead</span></div>
+      </div>
+    </section>
 
-  <div class="cards">
-    <div class="service-card"><h3>Web Animations</h3><p>Creative 3D & motion experiences.</p></div>
-    <div class="service-card"><h3>SEO Strategy</h3><p>Rank, attract & convert faster.</p></div>
-    <div class="service-card"><h3>Performance Ads</h3><p>Google Ads • Meta Ads • ROI-focused.</p></div>
-    <div class="service-card"><h3>Brand Identity</h3><p>Logos • Visual Systems • Creatives.</p></div>
-  </div>
-</section>
+    <section id="contact" class="section contact">
+      <h2 class="section-title">Let’s Build Something</h2>
 
-<section id="work" class="section alt">
-  <h2 class="section-title">Selected Work</h2>
+      <div class="contact-grid">
+        <form class="contact-form" action="mailto:hello@digitalcoldbrew.example" method="post" enctype="text/plain">
+          <input name="name" placeholder="Name" required />
+          <input name="email" placeholder="Email" required />
+          <textarea name="message" placeholder="Tell us about your project..." rows="5" required></textarea>
+          <button class="btn primary" type="submit">Send Message</button>
+        </form>
 
-  <div class="portfolio">
-    <div class="project"><div class="project-thumb">A</div><div class="project-meta"><h4>Branding</h4><p>+80% Organic Traffic</p></div></div>
-    <div class="project"><div class="project-thumb">B</div><div class="project-meta"><h4>E-Commerce</h4><p>2.3x Conversions</p></div></div>
-    <div class="project"><div class="project-thumb">C</div><div class="project-meta"><h4>Lead Generation</h4><p>45% Lower CPA</p></div></div>
-  </div>
-</section>
+        <div class="contact-info">
+          <h4>Email</h4>
+          <p><a href="mailto:hello@digitalcoldbrew.example">hello@digitalcoldbrew.example</a></p>
+          <h4>Location</h4>
+          <p>New Delhi, India</p>
+        </div>
+      </div>
+    </section>
+  </main>
 
-<section id="pricing" class="section">
-  <h2 class="section-title">Packages</h2>
+  <footer class="site-footer">
+    © DigitalColdBrew — All Rights Reserved
+  </footer>
 
-  <div class="pricing-grid">
-    <div class="price-card"><h3>Starter</h3><p>₹15,000</p></div>
-    <div class="price-card recommended"><h3>Growth</h3><p>₹45,000</p></div>
-    <div class="price-card"><h3>Scale</h3><p>Custom</p></div>
-  </div>
-</section>
-
-<section id="team" class="section alt">
-  <h2 class="section-title">Team</h2>
-
-  <div class="team-grid">
-    <div class="member"><div class="avatar">M</div><strong>Manav</strong><span>Founder</span></div>
-    <div class="member"><div class="avatar">A</div><strong>Aarti</strong><span>Creative Lead</span></div>
-    <div class="member"><div class="avatar">R</div><strong>Ravi</strong><span>Performance</span></div>
-  </div>
-</section>
-
-<section id="contact" class="section contact">
-  <h2 class="section-title">Let’s Build Something</h2>
-
-  <div class="contact-grid">
-    <form class="contact-form">
-      <input placeholder="Name" required>
-      <input placeholder="Email" required>
-      <textarea rows="5" placeholder="Tell us about your project..."></textarea>
-      <button class="btn primary">Send Message</button>
-    </form>
-
-    <div class="contact-info">
-      <h4>Email</h4>
-      <p>hello@digitalcoldbrew.com</p>
-      <h4>Location</h4>
-      <p>New Delhi, India</p>
-    </div>
-  </div>
-</section>
-
-</main>
-
-<footer class="site-footer">
-  © 2025 DigitalColdBrew — All Rights Reserved
-</footer>
-
-<!-- IMPORTANT: LOAD LAST -->
-<script src="script.js"></script>
-
+  <!-- script.js MUST be loaded last -->
+  <script src="script.js"></script>
 </body>
 </html>
