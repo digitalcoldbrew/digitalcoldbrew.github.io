@@ -1,142 +1,140 @@
-// script.js (final) - robust loader: uses embedded shader tags first, fallback to fetch()
-// Full-page coffee fluid ripple background (mouse + touch + scroll)
+// script.js
+//  - three.js animated shader background + particles
+//  - simple floating card parallax & GSAP scroll animations
+// Note: this uses three.min.js and gsap loaded from CDN in index.html
 
-let scene, camera, renderer, material, mesh, clock;
-let uniforms = null;
+(() => {
+  // Basic scene + camera + renderer
+  const canvas = document.getElementById('hero-canvas');
+  const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+  renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+  renderer.setSize(window.innerWidth, window.innerHeight);
 
-// quick WebGL support check
-function webglSupported() {
-  try {
-    const c = document.createElement('canvas');
-    return !!(window.WebGLRenderingContext && (c.getContext('webgl') || c.getContext('experimental-webgl')));
-  } catch (e) {
-    return false;
-  }
-}
+  const scene = new THREE.Scene();
 
-function createRenderer(canvas) {
-  const r = new THREE.WebGLRenderer({ canvas: canvas, antialias: true, alpha: true });
-  r.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
-  r.setSize(window.innerWidth, window.innerHeight);
-  return r;
-}
+  const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 1000);
+  camera.position.set(0, 0, 6);
 
-function loadShadersFromTags() {
-  const vTag = document.getElementById('vertexShader');
-  const fTag = document.getElementById('fragmentShader');
-  if (!vTag || !fTag) return null;
-  const v = vTag.textContent && vTag.textContent.trim().length > 10 ? vTag.textContent : null;
-  const f = fTag.textContent && fTag.textContent.trim().length > 10 ? fTag.textContent : null;
-  if (v && f) return { vert: v, frag: f };
-  return null;
-}
+  // TIME uniform
+  const clock = new THREE.Clock();
 
-function fetchShaders() {
-  return Promise.all([
-    fetch('coffee-shader.vert').then(r => r.ok ? r.text() : Promise.reject('vert fetch failed')),
-    fetch('coffee-shader.frag').then(r => r.ok ? r.text() : Promise.reject('frag fetch failed'))
-  ]).then(([v, f]) => ({ vert: v, frag: f }));
-}
+  // Shader plane (wavy color background)
+  const planeGeo = new THREE.PlaneGeometry(16, 9, 64, 64);
 
-function initCoffee() {
-  const canvas = document.getElementById('coffee-canvas');
-  if (!canvas) return;
-  if (!webglSupported()) {
-    canvas.style.display = 'none';
-    console.warn('WebGL not supported - canvas hidden.');
-    return;
-  }
+  const vert = `
+    varying vec2 vUv;
+    uniform float uTime;
+    void main() {
+      vUv = uv;
+      vec3 p = position;
+      float freq = 1.6;
+      float amp = 0.35;
+      p.z += sin((p.x+uTime*0.8)*freq)*amp + cos((p.y-uTime*0.5)*freq)*amp*0.6;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(p,1.0);
+    }
+  `;
 
-  renderer = createRenderer(canvas);
-  scene = new THREE.Scene();
-  camera = new THREE.Camera();
-  clock = new THREE.Clock();
+  const frag = `
+    varying vec2 vUv;
+    uniform float uTime;
+    void main(){
+      // gradient
+      vec3 col1 = vec3(0.02, 0.09, 0.12);
+      vec3 col2 = vec3(0.05, 0.35, 0.28);
+      vec3 col3 = vec3(0.9, 0.4, 0.45);
+      float g = smoothstep(0.0,1.0,vUv.y + 0.1*sin(uTime*0.2 + vUv.x*6.0));
+      vec3 color = mix(col1, col2, g);
+      color = mix(color, col3, pow(vUv.x, 2.0)*0.12);
+      // vignette
+      float vign = smoothstep(0.7, 0.15, distance(vUv, vec2(0.5)));
+      color *= (1.0 - 0.5 * vign);
+      gl_FragColor = vec4(color, 1.0);
+    }
+  `;
 
-  // uniforms
-  uniforms = {
-    u_time: { value: 0.0 },
-    u_mouse: { value: new THREE.Vector2(0.5, 0.5) },
-    u_scroll: { value: 0.0 },
-    u_resolution: { value: new THREE.Vector2(window.innerWidth, window.innerHeight) }
-  };
-
-  const geometry = new THREE.PlaneGeometry(2, 2);
-  // temporary material while shader loads
-  material = new THREE.ShaderMaterial({
-    uniforms,
-    vertexShader: 'void main(){ gl_Position = vec4(position,1.0); }',
-    fragmentShader: 'void main(){ gl_FragColor = vec4(0.12,0.08,0.05,1.0); }',
-    depthTest: false
+  const planeMat = new THREE.ShaderMaterial({
+    vertexShader: vert,
+    fragmentShader: frag,
+    uniforms: {
+      uTime: { value: 0 }
+    },
+    side: THREE.DoubleSide
   });
 
-  mesh = new THREE.Mesh(geometry, material);
-  scene.add(mesh);
+  const plane = new THREE.Mesh(planeGeo, planeMat);
+  plane.scale.set(1.2,1.2,1);
+  plane.rotation.x = -0.05;
+  plane.position.z = -2;
+  scene.add(plane);
 
-  // Try embedded tags first
-  const embedded = loadShadersFromTags();
-  const shaderPromise = embedded ? Promise.resolve(embedded) : fetchShaders();
+  // Particles system (subtle)
+  const particleCount = 350;
+  const pGeo = new THREE.BufferGeometry();
+  const positions = new Float32Array(particleCount * 3);
+  for (let i = 0; i < particleCount; i++) {
+    positions[i*3+0] = (Math.random() - 0.5) * 14;
+    positions[i*3+1] = (Math.random() - 0.5) * 8;
+    positions[i*3+2] = (Math.random() - 0.5) * 6;
+  }
+  pGeo.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+  const pMat = new THREE.PointsMaterial({ size: 0.035, transparent: true, opacity: 0.65 });
+  const particles = new THREE.Points(pGeo, pMat);
+  scene.add(particles);
 
-  shaderPromise.then(sh => {
-    material.vertexShader = sh.vert;
-    material.fragmentShader = sh.frag;
-    material.needsUpdate = true;
-    // start animation if not already
-    if (!animationRunning) startLoop();
-  }).catch(err => {
-    console.warn('Failed to load external shaders, embedded used if present. Error:', err);
+  // Simple responsive resize
+  function onResize(){
+    const w = window.innerWidth, h = window.innerHeight;
+    renderer.setSize(w, h);
+    camera.aspect = w / h;
+    camera.updateProjectionMatrix();
+  }
+  window.addEventListener('resize', onResize, { passive: true });
+
+  // Mouse parallax for camera
+  const mouse = { x:0, y:0 };
+  window.addEventListener('mousemove', (e)=>{
+    mouse.x = (e.clientX / window.innerWidth) * 2 - 1;
+    mouse.y = (e.clientY / window.innerHeight) * 2 - 1;
   });
 
-  setupInteraction();
-  // start loop immediately (will show temporary color until shader loaded)
-  if (!animationRunning) startLoop();
-}
-
-let animationRunning = false;
-function startLoop() {
-  animationRunning = true;
-  function loop() {
-    requestAnimationFrame(loop);
-    if (uniforms) uniforms.u_time.value = clock.getElapsedTime();
-    if (renderer && scene && camera) renderer.render(scene, camera);
+  // Animate
+  function animate(){
+    const t = clock.getElapsedTime();
+    planeMat.uniforms.uTime.value = t;
+    // subtle particle animation
+    particles.rotation.y = t * 0.02;
+    // camera slight parallax
+    camera.position.x += (mouse.x * 0.8 - camera.position.x) * 0.05;
+    camera.position.y += (-mouse.y * 0.6 - camera.position.y) * 0.05;
+    camera.lookAt(0,0,0);
+    renderer.render(scene, camera);
+    requestAnimationFrame(animate);
   }
-  loop();
-}
+  animate();
 
-// interactions
-function setupInteraction() {
-  // mouse
-  window.addEventListener('mousemove', (e) => {
-    if (!uniforms) return;
-    uniforms.u_mouse.value.set(e.clientX / window.innerWidth, 1 - (e.clientY / window.innerHeight));
-  }, { passive: true });
+  // --- UI: floating card parallax
+  const card = document.getElementById('floating-card');
+  // map mouse to card transform
+  window.addEventListener('mousemove', (e)=>{
+    const rx = (e.clientX / window.innerWidth) - 0.5;
+    const ry = (e.clientY / window.innerHeight) - 0.5;
+    if(card){
+      card.style.transform = `translate3d(${rx * 18}px, ${ry * 18}px, 0) rotateX(${ -ry * 6 }deg) rotateY(${ rx * 8 }deg)`;
+    }
+  });
 
-  // touch
-  window.addEventListener('touchmove', (e) => {
-    if (!uniforms || !e.touches || e.touches.length === 0) return;
-    const t = e.touches[0];
-    uniforms.u_mouse.value.set(t.clientX / window.innerWidth, 1 - (t.clientY / window.innerHeight));
-  }, { passive: true });
+  // GSAP entry animations
+  gsap.registerPlugin(ScrollTrigger);
+  gsap.from(".hero-left h1", { y: 40, opacity:0, duration:1.05, ease:"power3.out", delay:0.2 });
+  gsap.from(".lead", { y: 20, opacity:0, duration:0.9, ease:"power3.out", delay:0.45 });
+  gsap.from(".btn", { y: 12, opacity:0, duration:0.7, stagger:0.08, delay:0.7 });
 
-  // scroll -> small mapped uniform
-  window.addEventListener('scroll', () => {
-    if (!uniforms) return;
-    const s = window.scrollY || window.pageYOffset || 0;
-    uniforms.u_scroll.value = Math.min(Math.max(s * 0.002, 0), 3.0);
-  }, { passive: true });
+  // reveal on scroll for cards
+  gsap.utils.toArray('.card').forEach((el)=>{
+    gsap.from(el, {
+      scrollTrigger:{ trigger: el, start: "top 80%" },
+      y: 30, opacity: 0, duration: 0.9, ease: "power3.out"
+    });
+  });
 
-  // resize
-  window.addEventListener('resize', () => {
-    if (!renderer || !uniforms) return;
-    renderer.setSize(window.innerWidth, window.innerHeight);
-    uniforms.u_resolution.value.set(window.innerWidth, window.innerHeight);
-  }, { passive: true });
-}
-
-// boot safely
-window.addEventListener('load', () => {
-  try {
-    initCoffee();
-  } catch (e) {
-    console.error('Coffee init crashed:', e);
-  }
-});
+})();
