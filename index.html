@@ -1,197 +1,113 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Digital ColdBrew</title>
+  <title>DigitalColdBrew — Digital Marketing & Creative Studio</title>
 
-  <link rel="stylesheet" href="styles.css" />
+  <!-- SEO: keywords + description -->
+  <!-- Put your primary targeted keywords here (replace examples) -->
+  <meta name="description" content="DigitalColdBrew — Creative digital marketing agency. SEO, UI/UX, 3D web animations, performance-driven campaigns." />
+  <meta name="keywords" content="digital marketing agency, web animations, creative studio, SEO, social media marketing, brand design, DigitalColdBrew, website animations" />
 
-  <!-- GSAP (we keep available for later animations/sections) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+  <!-- OpenGraph / Social -->
+  <meta property="og:title" content="DigitalColdBrew — Creative Digital Marketing" />
+  <meta property="og:description" content="Creative campaigns, conversion focused design, and immersive website animations." />
+  <meta property="og:type" content="website" />
+  <meta property="og:image" content="placeholder-og-image.jpg" />
 
-  <!-- Three.js (reliable CDN) -->
-  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
-
-  <!--
-    EMBEDDED SHADERS: Putting them in the HTML avoids fetch/MIME issues on GitHub Pages.
-    script.js will look here first; if empty it will fall back to fetching .vert/.frag files
-  -->
-<script id="vertexShader" type="x-shader/x-vertex">
-  // Simple fullscreen vertex shader (DO NOT redeclare 'position' — Three.js already provides it)
-  #ifdef GL_ES
-  precision highp float;
-  #endif
-
-  void main() {
-    // 'position' is provided by Three.js — use it directly
-    gl_Position = vec4(position, 1.0);
+  <!-- JSON-LD structured data (localBusiness example). Edit as needed -->
+  <script type="application/ld+json">
+  {
+    "@context":"https://schema.org",
+    "@type":"ProfessionalService",
+    "name":"DigitalColdBrew",
+    "url":"https://yourdomain.example",
+    "logo":"https://yourdomain.example/logo.png",
+    "description":"Creative digital marketing studio offering web animation, SEO, branding and performance marketing.",
+    "sameAs":["https://www.facebook.com/your","https://www.instagram.com/your"]
   }
-</script>
-
-
-  <script id="fragmentShader" type="x-shader/x-fragment">
-precision highp float;
-
-uniform float u_time;
-uniform vec2 u_resolution;
-uniform vec2 u_mouse;
-uniform float u_scroll;
-
-// --- helpers ---
-float hash(vec2 p) {
-  p = fract(p * vec2(123.34, 456.21));
-  p += dot(p, p + 45.32);
-  return fract(p.x * p.y);
-}
-
-float noise(vec2 p) {
-  vec2 i = floor(p);
-  vec2 f = fract(p);
-  float a = hash(i);
-  float b = hash(i + vec2(1.0, 0.0));
-  float c = hash(i + vec2(0.0, 1.0));
-  float d = hash(i + vec2(1.0, 1.0));
-  vec2 u = f * f * (3.0 - 2.0 * f);
-  return mix(a, b, u.x) + (c - a) * u.y * (1.0 - u.x) + (d - b) * u.x * u.y;
-}
-
-float fbm(vec2 p) {
-  float v = 0.0;
-  float a = 0.5;
-  for (int i = 0; i < 5; i++) {
-    v += a * noise(p);
-    p *= 2.0;
-    a *= 0.5;
-  }
-  return v;
-}
-
-// smooth circular mask (for subtle center darkening)
-float circleMask(vec2 uv, vec2 center, float radius) {
-  float d = length(uv - center);
-  return smoothstep(radius, radius - 0.12, d);
-}
-
-void main() {
-  vec2 uv = gl_FragCoord.xy / u_resolution.xy;
-  vec2 aspectUV = uv;
-  aspectUV.x *= u_resolution.x / u_resolution.y; // preserve aspect
-
-  // mouse (fallback to center)
-  vec2 mouse = u_mouse;
-  if (mouse.x < 0.0001 && mouse.y < 0.0001) {
-    mouse = vec2(0.5, 0.5);
-  }
-  // convert mouse to uv-space (same space as uv)
-  vec2 mouseUV = vec2(mouse.x, 1.0 - mouse.y);
-
-  float t = u_time * 0.9;
-  float scrollInfluence = clamp(u_scroll * 0.6, 0.0, 1.5);
-
-  // base gentle undulation using fbm
-  float baseFlow = fbm((aspectUV * 1.8) + vec2(t * 0.08, -t * 0.06));
-
-  // local ripple from mouse movement
-  vec2 diff = aspectUV - mouseUV;
-  float dist = length(diff);
-  float ripple = sin(dist * 45.0 - t * 6.5) * exp(-dist * 6.5);
-
-  // add a few moving layers for viscosity feel
-  float layer1 = fbm((aspectUV * 3.8) + vec2(t * 0.12, -t * 0.09));
-  float layer2 = fbm((aspectUV * 6.5) - vec2(t * 0.06, t * 0.03));
-
-  // combine them
-  float flow = baseFlow * 0.45 + layer1 * 0.28 + layer2 * 0.15 + ripple * 0.9 + scrollInfluence * 0.25;
-
-  // clamp & smooth
-  flow = smoothstep(-0.3, 1.0, flow);
-
-  // coffee color palette
-  vec3 cream = vec3(0.96, 0.93, 0.89);     // background warm cream
-  vec3 caramel = vec3(0.72, 0.50, 0.34);   // mid coffee
-  vec3 espresso = vec3(0.18, 0.09, 0.05);  // deep coffee
-
-  // compute color by blending with flow
-  vec3 coffee = mix(caramel, espresso, clamp(flow * 1.2, 0.0, 1.0));
-  vec3 background = mix(cream, coffee, 0.18);
-
-  // subtle surface highlight (sheen) — guided by flow + a whisper of noise
-  float sheen = (sin((aspectUV.y + t * 0.6) * 25.0) * 0.5 + 0.5) * 0.06;
-  float micro = (fbm(aspectUV * 30.0 + t * 2.0) - 0.5) * 0.02;
-
-  // depth/edge darkening using a circular mask to give volume
-  float mask = circleMask(aspectUV, vec2(0.5 * (u_resolution.x/u_resolution.y), 0.5), 0.9);
-  coffee *= mix(1.0, 0.86, mask * 0.45);
-
-  // final color composition: base background blended with coffee surface and sheen
-  vec3 color = mix(background, coffee, flow * 1.05);
-  color += sheen * flow;
-  color += micro * flow;
-
-  // tiny rim highlight near ripple center
-  float rim = exp(-dist * 14.0) * 0.12;
-  color += vec3(0.04, 0.02, 0.01) * rim;
-
-  // slight gamma
-  color = pow(color, vec3(0.95));
-
-  gl_FragColor = vec4(color, 1.0);
-}
   </script>
 
+  <!-- CSS -->
+  <link rel="stylesheet" href="style.css">
+
+  <!-- Libraries from CDN (no build required) -->
+  <script src="https://unpkg.com/three@0.164.0/build/three.min.js"></script>
+  <script src="https://unpkg.com/three@0.164.0/examples/js/controls/OrbitControls.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.0/dist/gsap.min.js"></script>
+  <script src="https://unpkg.com/gsap@3.12.0/dist/ScrollTrigger.min.js"></script>
+
+  <!-- Small helpful fonts - change to your brand font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- Inline CSS fallback for very small screens -->
+  <style>html,body{height:100%;}</style>
 </head>
 <body>
+  <div id="canvas-wrap">
+    <!-- three.js will attach here -->
+    <canvas id="hero-canvas"></canvas>
+    <div class="hero-overlay">
+      <header class="site-header">
+        <div class="logo">DigitalColdBrew</div>
+        <nav class="nav">
+          <a href="#services">Services</a>
+          <a href="#work">Work</a>
+          <a href="#contact" class="cta">Contact</a>
+        </nav>
+      </header>
 
-  <!-- Full-page WebGL canvas -->
-  <canvas id="coffee-canvas"></canvas>
+      <section class="hero">
+        <div class="hero-left">
+          <h1><span class="accent">We craft</span> digital experiences that convert</h1>
+          <p class="lead">Design-led websites, performance marketing, and immersive 3D animations for brands who want to stand out.</p>
+          <div class="hero-actions">
+            <a class="btn" href="#work">Our Work</a>
+            <a class="btn outline" href="#contact">Let's Talk</a>
+          </div>
+        </div>
 
-  <!-- Content above canvas -->
-  <header class="nav">
-    <div class="brand">Digital <span>ColdBrew</span></div>
-    <nav>
-      <a href="#home">Home</a>
-      <a href="#about">Who we are</a>
-      <a href="#services">Services</a>
-      <a href="#case">Case Studies</a>
-      <a href="#contact">Contact</a>
-    </nav>
-  </header>
+        <div class="hero-right">
+          <!-- Small placeholder card that will float on top of canvas -->
+          <div class="floating-card" id="floating-card">
+            <div class="card-media">DCB</div>
+            <div class="card-text">
+              <strong>DigitalColdBrew</strong>
+              <span>Creative Agency</span>
+            </div>
+          </div>
+        </div>
+      </section>
+    </div>
+  </div>
 
+  <!-- SIMPLE CONTENT TO SHOW SCROLL TRIGGERS -->
   <main>
-    <section id="home" class="hero">
-      <h1>Digital ColdBrew</h1>
-      <p>Creative production for lifestyle brands — studio, shoots & performance marketing.</p>
-    </section>
-
-    <section id="about" class="content">
-      <h2>Who we are</h2>
-      <p>We craft campaigns that blend creativity, storytelling and measurable performance.</p>
-    </section>
-
-    <section id="services" class="content">
+    <section id="services" class="section">
       <h2>Services</h2>
-      <ul>
-        <li>Social Media Marketing</li>
-        <li>Brand Strategy</li>
-        <li>Product Shoot & Video Production</li>
-        <li>Performance Marketing</li>
-      </ul>
+      <div class="grid">
+        <div class="card">Website Animations</div>
+        <div class="card">SEO & Content</div>
+        <div class="card">Performance Ads</div>
+      </div>
     </section>
 
-    <section id="case" class="content">
-      <h2>Case Studies</h2>
-      <p>Coming soon — with real brand campaigns and detailed results.</p>
+    <section id="work" class="section alt">
+      <h2>Selected Work</h2>
+      <div class="grid">
+        <div class="card tall">Project A</div>
+        <div class="card">Project B</div>
+        <div class="card">Project C</div>
+      </div>
     </section>
 
-    <section id="contact" class="content">
-      <h2>Contact</h2>
-      <p>Email: contact@digitalcoldbrew.com</p>
+    <section id="contact" class="section">
+      <h2>Let's make something</h2>
+      <p>Reach out: <a href="mailto:hello@digitalcoldbrew.example">hello@digitalcoldbrew.example</a></p>
     </section>
   </main>
 
-  <!-- final script: robust loader will use the embedded shaders if present -->
   <script src="script.js"></script>
 </body>
 </html>
