@@ -5,45 +5,28 @@
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>DigitalColdBrew — Creative Digital Marketing & Web Animations</title>
 
-  <meta name="description" content="DigitalColdBrew — creative digital marketing agency: web design, SEO, performance ads, brand strategy and immersive web animations." />
-  <meta name="keywords" content="digital marketing agency, web animations, SEO services, creative agency, branding, social media, DigitalColdBrew" />
+  <meta name="description" content="DigitalColdBrew — creative digital marketing agency specializing in animations, SEO, ads & brand design." />
+  <meta name="keywords" content="digital marketing, web animations, SEO, branding, creative agency" />
   <meta name="author" content="DigitalColdBrew">
 
-  <meta property="og:title" content="DigitalColdBrew — Creative Digital Marketing" />
-  <meta property="og:description" content="Web animations, performance marketing and high-converting branding." />
-  <meta property="og:type" content="website" />
-
-  <!-- Structured Data -->
-  <script type="application/ld+json">
-  {
-    "@context":"https://schema.org",
-    "@type":"Organization",
-    "name":"DigitalColdBrew",
-    "url":"https://digitalcoldbrew.github.io",
-    "description":"Creative Marketing Studio specialising in Web Animations, SEO & Performance Marketing",
-    "service":[
-      {"@type":"Service","name":"Website Design & Animations"},
-      {"@type":"Service","name":"SEO & Content Strategy"},
-      {"@type":"Service","name":"Performance Advertising"},
-      {"@type":"Service","name":"Brand Identity & Creative"}
-    ]
-  }
-  </script>
-
+  <!-- STYLES -->
   <link rel="stylesheet" href="styles.css">
 
-  <!-- THREE.JS + GSAP -->
+  <!-- FONTS -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <!-- THREE.JS (must load BEFORE script.js) -->
   <script src="https://unpkg.com/three@0.164.0/build/three.min.js"></script>
   <script src="https://unpkg.com/three@0.164.0/examples/js/controls/OrbitControls.js"></script>
   <script src="https://unpkg.com/three@0.164.0/examples/js/loaders/GLTFLoader.js"></script>
 
+  <!-- GSAP -->
   <script src="https://unpkg.com/gsap@3.12.0/dist/gsap.min.js"></script>
   <script src="https://unpkg.com/gsap@3.12.0/dist/ScrollTrigger.min.js"></script>
 
-  <!-- Lottie -->
+  <!-- LOTTIE -->
   <script src="https://unpkg.com/lottie-web/build/player/lottie.min.js"></script>
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
 </head>
 
 <body>
@@ -73,7 +56,7 @@
         </div>
 
         <ul class="hero-bullets">
-          <li><strong>UI/UX</strong> that boosts conversions</li>
+          <li><strong>UI/UX</strong> with high conversions</li>
           <li><strong>SEO + Content</strong> for organic growth</li>
           <li><strong>Performance Ads</strong> with measurable ROI</li>
         </ul>
@@ -96,13 +79,13 @@
 
 <section id="services" class="section">
   <h2 class="section-title">What We Do</h2>
-  <p class="section-sub">Marketing meets design.</p>
+  <p class="section-sub">Marketing. Animation. Branding.</p>
 
   <div class="cards">
-    <article class="service-card"><h3>Web Animations</h3><p>High performance, creative experiences.</p></article>
-    <article class="service-card"><h3>SEO & Content</h3><p>Rank, attract and convert organically.</p></article>
-    <article class="service-card"><h3>Performance Ads</h3><p>Revenue-driven campaigns.</p></article>
-    <article class="service-card"><h3>Branding</h3><p>Beautiful, strategic branding.</p></article>
+    <div class="service-card"><h3>Web Animations</h3><p>Creative 3D & motion experiences.</p></div>
+    <div class="service-card"><h3>SEO Strategy</h3><p>Rank, attract & convert faster.</p></div>
+    <div class="service-card"><h3>Performance Ads</h3><p>Google Ads • Meta Ads • ROI-focused.</p></div>
+    <div class="service-card"><h3>Brand Identity</h3><p>Logos • Visual Systems • Creatives.</p></div>
   </div>
 </section>
 
@@ -110,9 +93,9 @@
   <h2 class="section-title">Selected Work</h2>
 
   <div class="portfolio">
-    <div class="project"><div class="project-thumb">A</div><div class="project-meta"><h4>Brand Redesign</h4><p>+80% traffic</p></div></div>
-    <div class="project"><div class="project-thumb">B</div><div class="project-meta"><h4>E-Commerce</h4><p>2.3x conversions</p></div></div>
-    <div class="project"><div class="project-thumb">C</div><div class="project-meta"><h4>Lead Gen</h4><p>45% lower CPA</p></div></div>
+    <div class="project"><div class="project-thumb">A</div><div class="project-meta"><h4>Branding</h4><p>+80% Organic Traffic</p></div></div>
+    <div class="project"><div class="project-thumb">B</div><div class="project-meta"><h4>E-Commerce</h4><p>2.3x Conversions</p></div></div>
+    <div class="project"><div class="project-thumb">C</div><div class="project-meta"><h4>Lead Generation</h4><p>45% Lower CPA</p></div></div>
   </div>
 </section>
 
@@ -120,15 +103,9 @@
   <h2 class="section-title">Packages</h2>
 
   <div class="pricing-grid">
-    <div class="price-card">
-      <h3>Starter</h3><div class="price">₹15,000</div>
-    </div>
-    <div class="price-card recommended">
-      <h3>Growth</h3><div class="price">₹45,000</div>
-    </div>
-    <div class="price-card">
-      <h3>Scale</h3><div class="price">Custom</div>
-    </div>
+    <div class="price-card"><h3>Starter</h3><p>₹15,000</p></div>
+    <div class="price-card recommended"><h3>Growth</h3><p>₹45,000</p></div>
+    <div class="price-card"><h3>Scale</h3><p>Custom</p></div>
   </div>
 </section>
 
@@ -143,13 +120,13 @@
 </section>
 
 <section id="contact" class="section contact">
-  <h2 class="section-title">Let’s Build Your Brand</h2>
+  <h2 class="section-title">Let’s Build Something</h2>
 
   <div class="contact-grid">
     <form class="contact-form">
       <input placeholder="Name" required>
       <input placeholder="Email" required>
-      <textarea placeholder="Your Project..." rows="5"></textarea>
+      <textarea rows="5" placeholder="Tell us about your project..."></textarea>
       <button class="btn primary">Send Message</button>
     </form>
 
@@ -165,9 +142,10 @@
 </main>
 
 <footer class="site-footer">
-  © DigitalColdBrew — All Rights Reserved
+  © 2025 DigitalColdBrew — All Rights Reserved
 </footer>
 
+<!-- IMPORTANT: LOAD LAST -->
 <script src="script.js"></script>
 
 </body>
