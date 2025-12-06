@@ -11,21 +11,17 @@ float noise(vec2 p){
 
 void main(){
   vec2 uv=vUv;
-
   float t=uTime*0.2;
   float n=noise(uv*5.0+t);
 
-  vec3 col1=vec3(0.95,0.45,0.4);
-  vec3 col2=vec3(0.2,0.45,0.55);
-  vec3 col3=vec3(0.06,0.12,0.18);
+  vec3 warm=vec3(0.95,0.45,0.4);
+  vec3 mid=vec3(0.2,0.45,0.55);
+  vec3 cool=vec3(0.06,0.12,0.18);
 
-  float g=smoothstep(0.0,1.0,uv.x+0.1*sin(uTime+uv.y*5.0));
-  vec3 base=mix(col1,col2,g);
-  base=mix(base,col3,uv.y*0.7);
-  base+=0.15*n;
+  float g=smoothstep(0.0,1.0,uv.x+0.1*sin(uTime+uv.y*6.0));
+  vec3 col=mix(warm,mid,g);
+  col=mix(col,cool,uv.y);
+  col+=0.15*n;
 
-  float vign=smoothstep(0.7,0.3,distance(uv,vec2(0.5)));
-  base*=1.0-(vign*0.5);
-
-  gl_FragColor=vec4(base,1.0);
+  gl_FragColor=vec4(col,1.0);
 }
