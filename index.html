@@ -4,254 +4,90 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
   <title>DigitalColdBrew — Creative Digital Marketing</title>
-  <meta name="description" content="DigitalColdBrew — Creative digital marketing agency." />
 
-  <!-- FAVICON (inline SVG, no upload needed) -->
+  <!-- FAVICON (works, no file needed) -->
   <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23ff6b6b'/%3E%3Cstop offset='1' stop-color='%236ef0c8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect rx='20' width='100' height='100' fill='url(%23g)'/%3E%3Ctext x='50' y='60' font-size='36' text-anchor='middle' fill='white' font-family='Arial'%3EDCB%3C/text%3E%3C/svg%3E">
 
-  <style>
-    /* Minimal inline styles (same as your styles.css) */
-    :root{
-      --bg:#07090b;--white:#eef3f6;--muted:#9aa6b2;--accent1:#ff6b6b;--accent2:#6ef0c8;--card:rgba(255,255,255,0.03);--max-width:1200px;font-family:Inter,system-ui,sans-serif;
-    }
-    html,body{margin:0;background:var(--bg);color:var(--white);height:100%}
-    #hero-wrap{position:relative;height:90vh;min-height:560px;overflow:hidden}
-    #hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block}
-    .overlay{position:relative;z-index:8;padding:20px}
-    .topnav{display:flex;justify-content:space-between;align-items:center}
-    .brand{font-size:22px;font-weight:900}
-    .nav-links a{margin-left:20px;text-decoration:none;color:var(--white)}
-    .cta{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:8px 14px;border-radius:8px;color:#021617}
-    .hero{display:flex;justify-content:space-between;align-items:center;height:calc(100% - 60px);padding-top:20px}
-    .hero-left{max-width:640px}
-    .tag{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:6px 10px;border-radius:999px;font-weight:700;font-size:13px}
-    h1{font-size:clamp(30px,5.2vw,54px);line-height:1.04;margin:12px 0}
-    .sub{color:var(--muted);margin-bottom:16px}
-    .hero-actions .btn{margin-right:12px}
-    .btn{padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700;display:inline-block}
-    .primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021617}
-    .ghost{border:1px solid rgba(255,255,255,0.06);color:var(--white)}
-    .hero-bullets{list-style:none;padding:0;margin-top:18px;color:var(--muted)}
-    .floating{width:260px;height:260px;background:var(--card);backdrop-filter:blur(8px);border-radius:12px;padding:18px;display:flex;flex-direction:column;align-items:start;gap:10px}
-    .badge{width:64px;height:64px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900}
-    main{max-width:var(--max-width);margin:0 auto}
-    .section{padding:72px 20px}
-    .alt{background:#05070a}
-    .section-title{font-size:28px;margin:0 0 8px}
-    .cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px}
-    .service-card{background:var(--card);padding:18px;border-radius:10px}
-    .portfolio{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:20px}
-    .project{display:flex;gap:12px;align-items:center}
-    .project-thumb{width:120px;height:80px;background:linear-gradient(90deg,#0f2a36,#183844);border-radius:8px;display:flex;align-items:center;justify-content:center}
-    .pricing-grid{display:flex;gap:20px;flex-wrap:wrap}
-    .price-card{background:var(--card);padding:18px;border-radius:10px;min-width:200px;text-align:center}
-    .team-grid{display:flex;gap:18px;flex-wrap:wrap}
-    .member{background:var(--card);padding:12px;border-radius:10px;min-width:140px;text-align:center}
-    .avatar{width:48px;height:48px;border-radius:8px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:inline-flex;align-items:center;justify-content:center;font-weight:800;margin-bottom:8px}
-    .contact-grid{display:grid;grid-template-columns:1fr 320px;gap:24px}
-    .contact-form input,.contact-form textarea{width:100%;padding:10px;border-radius:8px;border:1px solid rgba(255,255,255,0.04);background:transparent;color:var(--white);margin-bottom:12px}
-    .site-footer{text-align:center;padding:18px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02)}
-    @media(max-width:900px){.hero{flex-direction:column;align-items:flex-start;padding-top:40px}}
-  </style>
+  <!-- FIXED CDN LINKS (these are correct!) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/loaders/GLTFLoader.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/controls/OrbitControls.js"></script>
 
-  <!-- Force fresh fonts (optional) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+
+  <style>
+    body{margin:0;background:#07090b;color:#eef3f6;font-family:Inter,system-ui,sans-serif;}
+    #hero-wrap{position:relative;height:90vh;overflow:hidden;}
+    #hero-canvas{position:absolute;inset:0;width:100%;height:100%;}
+    .overlay{position:relative;z-index:10;padding:20px;}
+    .topnav{display:flex;justify-content:space-between;align-items:center;}
+    .cta{background:linear-gradient(90deg,#ff6b6b,#6ef0c8);padding:8px 14px;border-radius:8px;color:#000;}
+    .hero{display:flex;justify-content:space-between;align-items:center;height:80%;}
+    .tag{background:linear-gradient(90deg,#ff6b6b,#6ef0c8);padding:6px 10px;border-radius:999px;}
+    .floating{width:260px;height:260px;background:rgba(255,255,255,0.04);backdrop-filter:blur(9px);border-radius:12px;padding:18px;}
+  </style>
 </head>
+
 <body>
-  <header id="hero-wrap">
-    <canvas id="hero-canvas"></canvas>
-    <div class="overlay">
-      <nav class="topnav">
-        <div class="brand">DigitalColdBrew</div>
-        <div class="nav-links">
-          <a href="#services">Services</a>
-          <a href="#work">Work</a>
-          <a href="#pricing">Packages</a>
-          <a href="#contact" class="cta">Get a Quote</a>
-        </div>
-      </nav>
 
-      <section class="hero">
-        <div class="hero-left">
-          <h1><span class="tag">Creative Studio</span><br>We design brands & campaigns that convert.</h1>
-          <p class="sub">Web animations • SEO • Performance Ads • Branding</p>
+<header id="hero-wrap">
+  <canvas id="hero-canvas"></canvas>
 
-          <div class="hero-actions">
-            <a href="#work" class="btn primary">See Work</a>
-            <a href="#contact" class="btn ghost">Start Project</a>
-          </div>
+  <div class="overlay">
+    <nav class="topnav">
+      <div class="brand">DigitalColdBrew</div>
+      <div class="links">
+        <a href="#services">Services</a>
+        <a href="#work">Work</a>
+        <a href="#pricing">Packages</a>
+        <a class="cta" href="#contact">Get a Quote</a>
+      </div>
+    </nav>
 
-          <ul class="hero-bullets">
-            <li><strong>UI/UX</strong> that boosts conversions</li>
-            <li><strong>SEO + Content</strong> for organic growth</li>
-            <li><strong>Performance Ads</strong> with measurable ROI</li>
-          </ul>
-        </div>
+    <section class="hero">
+      <div>
+        <h1><span class="tag">Creative Studio</span><br>We design brands & campaigns that convert.</h1>
+        <p>Web animations • SEO • Performance Ads • Branding</p>
+      </div>
 
-        <div class="hero-right">
-          <div id="lottie-placeholder" class="floating">
-            <div class="badge">DCB</div>
-            <div class="meta">
-              <h4>DigitalColdBrew</h4>
-              <span>Creative Agency</span>
-            </div>
-          </div>
-        </div>
-      </section>
-    </div>
-  </header>
-
-  <main>
-    <section id="services" class="section">
-      <h2 class="section-title">What We Do</h2>
-      <p class="section-sub">Marketing. Animation. Branding.</p>
-      <div class="cards">
-        <div class="service-card"><h3>Web Animations</h3><p>Creative 3D & motion experiences.</p></div>
-        <div class="service-card"><h3>SEO Strategy</h3><p>Rank, attract & convert.</p></div>
-        <div class="service-card"><h3>Performance Ads</h3><p>ROI-driven campaigns.</p></div>
-        <div class="service-card"><h3>Brand Identity</h3><p>Visual systems & storytelling.</p></div>
+      <div class="floating">
+        <div class="badge">DCB</div>
+        <strong>DigitalColdBrew</strong><br>
+        Creative Agency
       </div>
     </section>
+  </div>
+</header>
 
-    <section id="work" class="section alt">
-      <h2 class="section-title">Selected Work</h2>
-      <div class="portfolio">
-        <div class="project"><div class="project-thumb">A</div><div class="project-meta"><h4>Brand Project</h4><p>Significant uplift</p></div></div>
-        <div class="project"><div class="project-thumb">B</div><div class="project-meta"><h4>E-commerce</h4><p>Conversion improvements</p></div></div>
-        <div class="project"><div class="project-thumb">C</div><div class="project-meta"><h4>Lead Gen</h4><p>Lower CPA</p></div></div>
-      </div>
-    </section>
 
-    <section id="pricing" class="section">
-      <h2 class="section-title">Packages</h2>
-      <div class="pricing-grid">
-        <div class="price-card"><h3>Starter</h3><p>₹15,000</p></div>
-        <div class="price-card recommended"><h3>Growth</h3><p>₹45,000</p></div>
-        <div class="price-card"><h3>Scale</h3><p>Custom</p></div>
-      </div>
-    </section>
+<script>
+console.log("Three.js loaded?", typeof THREE);
 
-    <section id="team" class="section alt">
-      <h2 class="section-title">Team</h2>
-      <div class="team-grid">
-        <div class="member"><div class="avatar">F</div><strong>Founder</strong><span>Founder</span></div>
-        <div class="member"><div class="avatar">C</div><strong>Creative Lead</strong><span>Creative Lead</span></div>
-        <div class="member"><div class="avatar">P</div><strong>Performance Lead</strong><span>Performance Lead</span></div>
-      </div>
-    </section>
+const canvas = document.getElementById("hero-canvas");
+const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+const scene = new THREE.Scene();
 
-    <section id="contact" class="section contact">
-      <h2 class="section-title">Let’s Build Something</h2>
-      <div class="contact-grid">
-        <form class="contact-form" action="mailto:hello@digitalcoldbrew.example" method="post" enctype="text/plain">
-          <input name="name" placeholder="Name" required />
-          <input name="email" placeholder="Email" required />
-          <textarea name="message" placeholder="Tell us about your project..." rows="5" required></textarea>
-          <button class="btn primary" type="submit">Send Message</button>
-        </form>
-        <div class="contact-info">
-          <h4>Email</h4>
-          <p><a href="mailto:hello@digitalcoldbrew.example">hello@digitalcoldbrew.example</a></p>
-          <h4>Location</h4>
-          <p>New Delhi, India</p>
-        </div>
-      </div>
-    </section>
-  </main>
+const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
+camera.position.z = 6;
 
-  <footer class="site-footer">© DigitalColdBrew — All Rights Reserved</footer>
+const geometry = new THREE.PlaneGeometry(10, 6, 60, 60);
+const material = new THREE.MeshBasicMaterial({ color: 0x112233, wireframe: true });
+const mesh = new THREE.Mesh(geometry, material);
+scene.add(mesh);
 
-  <!-- SCRIPT: robust loader + scene (forces fresh CDN fetch by appending timestamp to URLs) -->
-  <script>
-  (async function(){
-    // append timestamp to bust caches
-    const t = Date.now();
-    const CDN = {
-      three: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js?v=' + t,
-      gltf: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/loaders/GLTFLoader.js?v=' + t,
-      orbit: 'https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/controls/OrbitControls.js?v=' + t,
-      gsap: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js?v=' + t,
-      scroll: 'https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js?v=' + t,
-      lottie: 'https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js?v=' + t
-    };
+function animate() {
+  mesh.rotation.y += 0.002;
+  renderer.render(scene, camera);
+  requestAnimationFrame(animate);
+}
+animate();
+</script>
 
-    function loadScript(src){ return new Promise((res,rej)=>{ const s=document.createElement('script'); s.src=src; s.async=false; s.onload=res; s.onerror=()=>rej(new Error('Load failed '+src)); document.head.appendChild(s); }); }
-
-    // load in order
-    try{
-      if(typeof THREE === 'undefined') await loadScript(CDN.three);
-      if(typeof THREE === 'undefined') throw new Error('Three failed to load');
-      // helpers
-      if(typeof THREE.GLTFLoader === 'undefined') await loadScript(CDN.gltf);
-      if(typeof THREE.OrbitControls === 'undefined') await loadScript(CDN.orbit);
-      // gsap
-      if(typeof gsap === 'undefined') await loadScript(CDN.gsap);
-      try{ if(!gsap.ScrollTrigger) await loadScript(CDN.scroll); }catch(e){}
-      // lottie optional
-      if(typeof lottie === 'undefined') await loadScript(CDN.lottie).catch(()=>{});
-    }catch(err){
-      console.error('Library load error',err);
-      // stop if THREE missing
-      if(typeof THREE === 'undefined'){ console.error('Three.js not available — aborting scene.'); return; }
-    }
-
-    // fetch optional shader files, fall back to inline
-    async function fetchText(path){ try{ const r=await fetch(path); if(!r.ok) return null; return await r.text(); }catch(e){ return null; } }
-    const vert = await fetchText('coffee-shader.vert');
-    const frag = await fetchText('coffee-shader.frag');
-
-    const vertexShader = vert || `varying vec2 vUv; uniform float uTime; void main(){ vUv=uv; vec3 p=position; p.z += sin((p.x + uTime*0.8) * 1.6) * 0.25; gl_Position = projectionMatrix * modelViewMatrix * vec4(p,1.0); }`;
-    const fragmentShader = frag || `varying vec2 vUv; uniform float uTime; void main(){ vec2 uv=vUv; float t=uTime*0.15; vec3 warm=vec3(0.95,0.45,0.38); vec3 mid=vec3(0.22,0.38,0.44); vec3 cool=vec3(0.06,0.12,0.18); float g=smoothstep(0.0,1.0,uv.x+0.05*sin(t+uv.y*4.0)); vec3 base=mix(warm,mid,g); base=mix(base,cool,pow(uv.y,1.6)*0.6); gl_FragColor=vec4(base,1.0); }`;
-
-    // scene setup
-    const canvas = document.getElementById('hero-canvas');
-    const renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,2));
-    renderer.setSize(window.innerWidth,window.innerHeight);
-
-    const scene = new THREE.Scene();
-    const camera = new THREE.PerspectiveCamera(50,window.innerWidth/window.innerHeight,0.1,1000);
-    camera.position.set(0,0,6);
-
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(16,9,80,80), new THREE.ShaderMaterial({vertexShader,fragmentShader,uniforms:{uTime:{value:0}},side:THREE.DoubleSide}));
-    plane.scale.set(1.12,1.12,1); plane.rotation.x = -0.05; plane.position.z = -2; scene.add(plane);
-
-    // particles
-    const count=420; const pGeo=new THREE.BufferGeometry(); const pos=new Float32Array(count*3);
-    for(let i=0;i<count;i++){ pos[i*3+0]=(Math.random()-0.5)*18; pos[i*3+1]=(Math.random()-0.5)*10; pos[i*3+2]=(Math.random()-0.5)*8; }
-    pGeo.setAttribute('position', new THREE.BufferAttribute(pos,3));
-    scene.add(new THREE.Points(pGeo,new THREE.PointsMaterial({size:0.028,transparent:true,opacity:0.6})));
-
-    scene.add(new THREE.AmbientLight(0xffffff,0.25));
-    const dl = new THREE.DirectionalLight(0xffffff,0.8); dl.position.set(5,5,5); scene.add(dl);
-
-    window.addEventListener('resize',()=>{ renderer.setSize(window.innerWidth,window.innerHeight); camera.aspect=window.innerWidth/window.innerHeight; camera.updateProjectionMatrix(); });
-
-    const mouse={x:0,y:0}; window.addEventListener('mousemove',e=>{ mouse.x=(e.clientX/window.innerWidth)*2-1; mouse.y=(e.clientY/window.innerHeight)*2-1; const floating = document.getElementById('lottie-placeholder'); if(floating) floating.style.transform = `translate3d(${(mouse.x*18)}px, ${(mouse.y*18)}px, 0)`; });
-
-    // attempt glb load then fallback
-    let floatingObj=null;
-    async function tryModel(){
-      try{
-        const h = await fetch('model.glb',{method:'HEAD'});
-        if(!h.ok) throw new Error('no model');
-        if(typeof THREE.GLTFLoader === 'undefined'){ createFallback(); return; }
-        const loader = new THREE.GLTFLoader();
-        loader.load('model.glb',g=>{ floatingObj=g.scene; floatingObj.scale.setScalar(1.2); floatingObj.position.set(0,-0.2,0); scene.add(floatingObj); }, undefined, ()=>createFallback());
-      }catch(e){ createFallback(); }
-    }
-    function createFallback(){ const geo=new THREE.TorusKnotGeometry(0.9,0.28,120,20); const mat=new THREE.MeshStandardMaterial({metalness:0.12,roughness:0.35}); const m=new THREE.Mesh(geo,mat); m.position.set(0,-0.2,0); scene.add(m); floatingObj=m; }
-
-    await tryModel();
-
-    const clock = new THREE.Clock();
-    (function anim(){ const t=clock.getElapsedTime(); plane.material.uniforms.uTime.value = t; scene.children.forEach(c=>{}); if(floatingObj){ floatingObj.rotation.y += 0.006 + Math.sin(t*0.12)*0.002; } renderer.render(scene,camera); camera.position.x += (mouse.x*0.8 - camera.position.x)*0.05; camera.position.y += (-mouse.y*0.45 - camera.position.y)*0.05; camera.lookAt(0,0,0); requestAnimationFrame(anim); })();
-
-    // lottie load if present
-    try{ const r = await fetch('logo-lottie.json',{method:'HEAD'}); if(r.ok && typeof lottie !== 'undefined'){ lottie.loadAnimation({container:document.getElementById('lottie-placeholder'),renderer:'svg',loop:true,autoplay:true,path:'logo-lottie.json'}); } }catch(e){}
-    // quick console check helper
-    console.info('Scene initialized. type "typeof THREE" in console to verify.');
-  })();
-  </script>
 </body>
 </html>
