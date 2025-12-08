@@ -1,68 +1,230 @@
-:root{
-  --bg:#07090b;
-  --muted:#9aa6b2;
-  --white:#eef3f6;
-  --accent1:#895129; /* primary brown */
-  --accent2:#C77A45; /* lighter brown for gradient */
-  --card-bg:rgba(255,255,255,0.03);
-  --maxw:1200px;
-  font-family: "Inter", system-ui, sans-serif;
+/* ------------------ GLOBAL ------------------ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-*{box-sizing:border-box}
-html,body{height:100%;margin:0;background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased;}
-
-#hero-wrap{position:relative;height:88vh;overflow:hidden}
-#hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
-.overlay{position:relative;z-index:4;padding:28px;max-width:var(--maxw);margin:0 auto}
-
-.topnav{display:flex;justify-content:space-between;align-items:center;gap:20px}
-.brand{font-weight:900;font-size:20px}
-.nav-links a{color:var(--white);text-decoration:none;margin-left:18px;font-weight:600}
-.cta{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:8px 14px;border-radius:10px;color:#021617;font-weight:700}
-
-.hero{display:flex;justify-content:space-between;align-items:center;padding-top:28px;min-height:calc(88vh - 120px)}
-.hero-left{max-width:640px;z-index:6}
-.tag{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;background:linear-gradient(90deg,var(--accent1),var(--accent2))}
-h1{font-size:clamp(28px,5.4vw,56px);line-height:1.02;margin:14px 0}
-.sub{color:var(--muted);margin-bottom:18px}
-.btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
-.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021617}
-.ghost{border:1px solid rgba(255,255,255,0.06);color:var(--white);background:transparent}
-
-.hero-bullets{list-style:none;padding:0;margin-top:20px;color:var(--muted);font-weight:600}
-
-/* floating card */
-.hero-right{z-index:6}
-.floating{width:300px;background:var(--card-bg);backdrop-filter:blur(10px);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:8px;align-items:flex-start;box-shadow:0 8px 30px rgba(0,0,0,0.6)}
-.badge{width:72px;height:72px;border-radius:14px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900}
-.meta h4{margin:0;font-size:16px}
-.meta span{color:var(--muted);font-size:13px}
-
-/* sections */
-main{max-width:var(--maxw);margin:40px auto}
-.section{padding:48px 20px}
-.alt{background:transparent}
-.section-title{font-size:24px;margin:0 0 10px}
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.service-card{background:var(--card-bg);padding:16px;border-radius:10px}
-.portfolio{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.project{display:flex;gap:12px;align-items:center}
-.project-thumb{width:110px;height:70px;border-radius:8px;background:linear-gradient(90deg,#0f2a36,#183844);display:flex;align-items:center;justify-content:center}
-.pricing-grid{display:flex;gap:18px;flex-wrap:wrap}
-.price-card{background:var(--card-bg);padding:18px;border-radius:10px;min-width:200px;text-align:center}
-.contact-grid{display:grid;grid-template-columns:1fr 320px;gap:24px}
-
-.site-footer{text-align:center;padding:18px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02)}
-
-/* responsive */
-@media(max-width:900px){
-  .hero{flex-direction:column;align-items:flex-start}
-  .floating{width:100%}
-  .nav-links{display:none}
-  main{margin-top:20px}
+body {
+  background: #080808;
+  font-family: "Inter", sans-serif;
+  color: #ffffff;
+  line-height: 1.6;
 }
-/* Contact Form Horizontal Layout */
+
+a {
+  color: inherit;
+  text-decoration: none;
+}
+
+/* ------------------ NAVBAR ------------------ */
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 50px;
+  position: relative;
+  z-index: 10;
+}
+
+.brand {
+  font-size: 22px;
+  font-weight: 700;
+}
+
+.nav-links {
+  display: flex;
+  gap: 28px;
+}
+
+.nav-links a {
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.cta {
+  padding: 10px 22px;
+  background: #895129;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* ------------------ HERO ------------------ */
+#hero-wrap {
+  position: relative;
+  height: 88vh;
+  overflow: hidden;
+}
+
+#hero-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: 0;
+}
+
+.overlay {
+  position: relative;
+  z-index: 5;
+  padding: 0 50px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.hero-left {
+  margin-top: 90px;
+  max-width: 760px;
+}
+
+.tag {
+  background: #895129;
+  padding: 10px 25px;
+  display: inline-block;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 38px;
+}
+
+h1 {
+  font-size: 56px;
+  font-weight: 900;
+  margin-top: 18px;
+}
+
+.sub {
+  margin-top: 15px;
+  opacity: 0.85;
+  font-size: 18px;
+}
+
+.hero-actions {
+  margin-top: 22px;
+  display: flex;
+  gap: 16px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: #895129;
+  color: #fff;
+}
+
+.btn.ghost {
+  border: 1px solid #895129;
+}
+
+/* Bullets */
+.hero-bullets {
+  margin-top: 30px;
+  list-style: none;
+  font-size: 15px;
+}
+
+.hero-bullets li {
+  margin-bottom: 6px;
+}
+
+/* ------------------ SECTIONS ------------------ */
+.section {
+  padding: 100px 50px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.section-title {
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.section-sub {
+  opacity: 0.8;
+  margin-bottom: 40px;
+}
+
+.alt {
+  background: #111;
+}
+
+/* ------------------ SERVICE CARDS ------------------ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.service-card {
+  background: #111;
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid #222;
+  transition: 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  border-color: #895129;
+}
+
+/* ------------------ PORTFOLIO ------------------ */
+.portfolio {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.project {
+  background: #111;
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid #222;
+  width: 280px;
+}
+
+.project-thumb {
+  height: 120px;
+  background: #222;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ------------------ PRICING ------------------ */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.price-card {
+  background: #111;
+  padding: 32px;
+  border-radius: 14px;
+  border: 1px solid #222;
+}
+
+.recommended {
+  border-color: #895129;
+}
+
+/* ------------------ CONTACT SECTION ------------------ */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+/* --- HORIZONTAL CONTACT FORM --- */
 .contact-form {
   display: flex;
   align-items: center;
@@ -82,15 +244,30 @@ main{max-width:var(--maxw);margin:40px auto}
   resize: none;
 }
 
+/* fixed widths for straight line layout */
 .contact-form input {
   width: 180px;
 }
 
 .contact-form textarea {
   width: 260px;
+  height: 46px;
 }
 
+/* Button */
 .contact-form .btn {
   padding: 10px 20px;
+  background: #895129;
   white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+
+/* ------------------ FOOTER ------------------ */
+.site-footer {
+  text-align: center;
+  padding: 30px;
+  border-top: 1px solid #222;
+  margin-top: 60px;
+  opacity: 0.7;
 }
