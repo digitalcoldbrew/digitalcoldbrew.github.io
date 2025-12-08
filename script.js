@@ -45,7 +45,7 @@
       varying float vWave;
       void main(){
         float t = uTime * 0.2;
-        vec3 c1 = vec3(1.0, 0.42, 0.42); // coral
+        vec3 c1 = vec3(1.0, 0.42, 0.42); // Medium Brown
         vec3 c2 = vec3(0.43, 0.94, 0.78); // mint
         vec3 c3 = vec3(0.09, 0.14, 0.18); // dark
         float g = smoothstep(0.0, 1.0, vUv.x + 0.12 * sin(t + vUv.y * 4.0));
