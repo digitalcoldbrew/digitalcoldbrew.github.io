@@ -1,88 +1,57 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+:root{
+  --bg:#060607;
+  --card-bg:rgba(255,255,255,0.03);
+  --muted:#9aa6b2;
+  --white:#eef3f6;
+  --accent1:#ff6b6b;
+  --accent2:#6ef0c8;
+  --maxw:1200px;
+  font-family: "Inter", system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
 }
 
-body, html {
-  height: 100%;
-  overflow-x: hidden;
-  background: #0f0d0a;
-  color: white;
-  font-family: 'Poppins', sans-serif;
-}
+*{box-sizing:border-box}
+html,body{height:100%;margin:0;background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased;}
 
-/* Fullscreen WebGL Canvas */
-#coffee-canvas {
-  position: fixed;
-  top: 0;
-  left: 0;
-  z-index: -1;
-  width: 100vw;
-  height: 100vh;
-}
+#hero-wrap{position:relative;height:88vh;overflow:hidden;}
+#hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
+.overlay{position:relative;z-index:2;padding:28px;max-width:var(--maxw);margin:0 auto}
 
-/* Navbar */
-.nav {
-  width: 100%;
-  padding: 25px 60px;
-  display: flex;
-  justify-content: space-between;
-  position: fixed;
-  top: 0;
-  z-index: 10;
-  background: transparent;
-}
+.topnav{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.brand{font-weight:900;font-size:20px}
+.nav-links a{color:var(--white);text-decoration:none;margin-left:18px;font-weight:600}
+.cta{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:8px 14px;border-radius:10px;color:#021617;font-weight:700}
 
-.nav a {
-  margin-left: 40px;
-  text-decoration: none;
-  color: #f7f3e9;
-  font-weight: 500;
-  font-size: 16px;
-}
+.hero{display:flex;justify-content:space-between;align-items:center;padding-top:28px;min-height:calc(88vh - 120px)}
+.hero-left{max-width:640px}
+.tag{display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;background:linear-gradient(90deg,var(--accent1),var(--accent2))}
+h1{font-size:clamp(28px,5.4vw,56px);line-height:1.02;margin:14px 0}
+.sub{color:var(--muted);margin-bottom:18px}
+.btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
+.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021617}
+.ghost{border:1px solid rgba(255,255,255,0.06);color:var(--white);background:transparent}
 
-.brand {
-  font-size: 26px;
-  font-weight: 700;
-}
+.hero-bullets{list-style:none;padding:0;margin-top:20px;color:var(--muted);font-weight:600}
 
-.brand span {
-  color: #c3915e;
-}
+/* floating card */
+.floating{width:280px;background:var(--card-bg);backdrop-filter:blur(8px);border-radius:14px;padding:18px;display:flex;flex-direction:column;gap:10px;align-items:flex-start}
+.badge{width:64px;height:64px;border-radius:12px;background:linear-gradient(90deg,var(--accent1),var(--accent2));display:flex;align-items:center;justify-content:center;font-weight:900}
+.meta h4{margin:0;font-size:16px}
+.meta span{color:var(--muted);font-size:13px}
 
-/* HERO */
-.hero {
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 0 60px;
-  position: relative;
-  z-index: 5;
-}
+/* sections */
+main{max-width:var(--maxw);margin:40px auto}
+.section{padding:48px 20px}
+.alt{background:transparent}
+.section-title{font-size:24px;margin:0 0 10px}
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+.service-card{background:var(--card-bg);padding:16px;border-radius:10px}
+.portfolio{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+.project{display:flex;gap:12px;align-items:center}
+.project-thumb{width:110px;height:70px;border-radius:8px;background:linear-gradient(90deg,#0f2a36,#183844);display:flex;align-items:center;justify-content:center}
 
-.hero h1 {
-  font-size: 76px;
-  font-weight: 800;
-}
-
-.hero p {
-  margin-top: 15px;
-  font-size: 22px;
-  max-width: 580px;
-  line-height: 1.4;
-}
-
-/* CONTENT SECTIONS */
-.content {
-  min-height: 80vh;
-  padding: 140px 60px;
-  position: relative;
-  z-index: 5;
-}
-
-h2 {
-  font-size: 42px;
-  margin-bottom: 20px;
+/* layout small */
+@media(max-width:900px){
+  .hero{flex-direction:column;align-items:flex-start}
+  .floating{width:100%}
+  main{margin-top:20px}
 }
