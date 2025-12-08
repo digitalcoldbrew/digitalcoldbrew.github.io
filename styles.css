@@ -2,8 +2,8 @@
   --bg:#07090b;
   --muted:#9aa6b2;
   --white:#eef3f6;
-  --accent1:#ff6b6b;
-  --accent2:#6ef0c8;
+  --accent1:#895129; /* primary brown */
+  --accent2:#C77A45; /* lighter brown for gradient */
   --card-bg:rgba(255,255,255,0.03);
   --maxw:1200px;
   font-family: "Inter", system-ui, sans-serif;
