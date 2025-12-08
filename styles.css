@@ -62,3 +62,35 @@ main{max-width:var(--maxw);margin:40px auto}
   .nav-links{display:none}
   main{margin-top:20px}
 }
+/* Contact Form Horizontal Layout */
+.contact-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.contact-form input,
+.contact-form textarea {
+  background: #111;
+  border: 1px solid #333;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 6px;
+  resize: none;
+}
+
+.contact-form input {
+  width: 180px;
+}
+
+.contact-form textarea {
+  width: 260px;
+}
+
+.contact-form .btn {
+  padding: 10px 20px;
+  white-space: nowrap;
+}
