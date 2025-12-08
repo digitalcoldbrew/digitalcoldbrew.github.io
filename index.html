@@ -103,9 +103,14 @@
           <button class="btn primary" type="submit">Get in Touch</button>
         </form>
 
-        <div class="contact-info">
-          <h4>Email</h4>
-          <p><a href="mailto:hello@digitalcoldbrew.example">hello@digitalcoldbrew.example</a></p>
+<form class="contact-form" action="mailto:hello@digitalcoldbrew.example" method="post" enctype="text/plain">
+  <input name="name" placeholder="Name" required>
+  <input name="email" placeholder="Email" required>
+  <input name="phone" placeholder="Phone Number" required>
+  <textarea name="message" rows="3" placeholder="Tell us about your project..." required></textarea>
+  <button class="btn primary" type="submit">Get in Touch</button>
+</form>
+
           <h4>We are Located in :-</h4>
           <p>Surat, Gujarat, India</p>
         </div>
