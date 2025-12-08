@@ -1,93 +1,211 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>DigitalColdBrew — Creative Digital Marketing</title>
+  <title>Digital ColdBrew</title>
 
-  <!-- FAVICON (works, no file needed) -->
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' x2='1'%3E%3Cstop offset='0' stop-color='%23ff6b6b'/%3E%3Cstop offset='1' stop-color='%236ef0c8'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect rx='20' width='100' height='100' fill='url(%23g)'/%3E%3Ctext x='50' y='60' font-size='36' text-anchor='middle' fill='white' font-family='Arial'%3EDCB%3C/text%3E%3C/svg%3E">
+  <link rel="stylesheet" href="styles.css" />
 
-  <!-- FIXED CDN LINKS (these are correct!) -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/three.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/loaders/GLTFLoader.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r152/examples/js/controls/OrbitControls.js"></script>
+  <!-- GSAP (optional for future animations) -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/gsap.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.2/ScrollTrigger.min.js"></script>
+  <!-- Three.js -->
+  <script src="https://cdn.jsdelivr.net/npm/three@0.152.0/build/three.min.js"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/lottie-web/5.9.6/lottie.min.js"></script>
+<!-- =========================================================
+   VERTEX SHADER
+   ========================================================= -->
+<script id="vertexShader" type="x-shader/x-vertex">
+  #ifdef GL_ES
+  precision highp float;
+  #endif
 
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;500;700;900&display=swap" rel="stylesheet">
+  attribute vec3 position;
 
-  <style>
-    body{margin:0;background:#07090b;color:#eef3f6;font-family:Inter,system-ui,sans-serif;}
-    #hero-wrap{position:relative;height:90vh;overflow:hidden;}
-    #hero-canvas{position:absolute;inset:0;width:100%;height:100%;}
-    .overlay{position:relative;z-index:10;padding:20px;}
-    .topnav{display:flex;justify-content:space-between;align-items:center;}
-    .cta{background:linear-gradient(90deg,#ff6b6b,#6ef0c8);padding:8px 14px;border-radius:8px;color:#000;}
-    .hero{display:flex;justify-content:space-between;align-items:center;height:80%;}
-    .tag{background:linear-gradient(90deg,#ff6b6b,#6ef0c8);padding:6px 10px;border-radius:999px;}
-    .floating{width:260px;height:260px;background:rgba(255,255,255,0.04);backdrop-filter:blur(9px);border-radius:12px;padding:18px;}
-  </style>
+  void main() {
+    gl_Position = vec4(position, 1.0);
+  }
+</script>
+
+
+<!-- =========================================================
+   FRAGMENT SHADER (OPTION 3 — LIGHT BEIGE COLD BREW)
+   ========================================================= -->
+<script id="fragmentShader" type="x-shader/x-fragment">
+  precision highp float;
+
+  uniform float u_time;
+  uniform vec2 u_resolution;
+  uniform vec2 u_mouse;
+  uniform float u_scroll;
+
+  // ---------- helpers ----------
+  vec2 hash2(vec2 p) {
+    p = vec2(dot(p, vec2(127.1, 311.7)),
+             dot(p, vec2(269.5,183.3)));
+    return -1.0 + 2.0 * fract(sin(p) * 43758.5453123);
+  }
+
+  float noise(vec2 p){
+    vec2 i = floor(p);
+    vec2 f = fract(p);
+    vec2 u = f*f*(3.0 - 2.0*f);
+
+    return mix(
+      mix(dot(hash2(i + vec2(0.0,0.0)), f - vec2(0.0,0.0)),
+          dot(hash2(i + vec2(1.0,0.0)), f - vec2(1.0,0.0)), u.x),
+      mix(dot(hash2(i + vec2(0.0,1.0)), f - vec2(0.0,1.0)),
+          dot(hash2(i + vec2(1.0,1.0)), f - vec2(1.0,1.0)), u.x),
+      u.y);
+  }
+
+  float fbm(vec2 p){
+    float v = 0.0;
+    float a = 0.5;
+    mat2 m = mat2(1.6,1.2,-1.2,1.6);
+    for(int i=0;i<5;i++){
+      v += a * noise(p);
+      p = m * p * 1.9;
+      a *= 0.5;
+    }
+    return v;
+  }
+
+  vec2 curlNoise(vec2 p){
+    float e = 0.001;
+    float n1 = fbm(p + vec2(0.0, e));
+    float n2 = fbm(p - vec2(0.0, e));
+    float a = (n1 - n2) / (2.0 * e);
+
+    float n3 = fbm(p + vec2(e, 0.0));
+    float n4 = fbm(p - vec2(e, 0.0));
+    float b = (n3 - n4) / (2.0 * e);
+    return normalize(vec2(a, -b));
+  }
+
+  float radialMask(vec2 uv, vec2 center, float r){
+    float d = distance(uv, center);
+    return smoothstep(r, r*0.6, d);
+  }
+
+  // ---------- palette ----------
+  vec3 milk = vec3(0.95, 0.92, 0.88);
+  vec3 lightCoffee = vec3(0.77, 0.63, 0.50);
+  vec3 midCoffee  = vec3(0.62, 0.44, 0.30);
+  vec3 darkCoffee = vec3(0.28, 0.15, 0.08);
+
+  void main() {
+    vec2 uv = gl_FragCoord.xy / u_resolution.xy;
+
+    vec2 center = uv - 0.5;
+    center.x *= u_resolution.x / u_resolution.y;
+
+    vec2 mouse = u_mouse;
+    if(length(mouse) < 0.001) mouse = vec2(0.5, 0.5);
+    vec2 mouseUV = mouse;
+
+    float t = u_time * 0.9;
+    float scroll = clamp(u_scroll, 0.0, 1.5);
+    float pour = smoothstep(0.06, 0.9, scroll*1.6);
+
+    vec2 flowPos = uv * 2.0 + vec2(0.0, t*0.05);
+    vec2 curl = curlNoise(flowPos * 1.3 + t*0.08);
+
+    curl += vec2(0.0, 0.55 * pour);
+
+    float big = fbm(uv * 1.2 - vec2(0.0, t*0.02));
+    float med = fbm(uv * 3.2 - vec2(t*0.04, -t*0.02));
+    float fine = fbm(uv * 8.0 + vec2(t*0.06, t*0.09));
+    float field = mix(big, med, 0.6) * 0.9 + fine * 0.35;
+
+    vec2 d = uv - mouseUV;
+    float dist = length(d) * 1.5;
+    float ripple = sin(dist * 12.0 - t * 2.0) * exp(-dist * 2.8);
+
+    vec2 pourOrigin = vec2(0.5, 1.25 - scroll * 1.75);
+    float pourDist = length(uv - pourOrigin);
+    float pourMask = smoothstep(0.45, 0.12, pourDist * (1.0 + scroll*2.2));
+
+    float stream = smoothstep(0.0, 0.9, (1.2 - (uv.y + scroll*0.8))) * 0.55;
+
+    float flow = (field * 0.9) + (ripple * 0.6) + (stream * pourMask * 1.2);
+
+    vec2 disp = curl * (0.02 + flow * 0.04);
+
+    float flow2 = fbm((uv + disp) * 3.0 + t*0.03);
+
+    float blend = smoothstep(-0.2, 0.5, flow2);
+
+    vec3 base = mix(milk, lightCoffee, smoothstep(0.0, 0.35, flow2));
+    vec3 midcol = mix(base, midCoffee, smoothstep(0.2, 0.6, flow2));
+    vec3 finalCol = mix(midcol, darkCoffee, smoothstep(0.5, 0.95, flow2));
+
+    float sheen = 0.03 * (1.0 - smoothstep(0.2, 0.9, flow));
+    sheen *= (0.6 + 0.4 * sin(t*1.8 + uv.x*6.0));
+
+    finalCol += sheen;
+
+    float vign = smoothstep(0.9, 0.3, length(center) * 1.05);
+    finalCol = mix(finalCol, milk, vign * 0.08);
+
+    finalCol = pow(finalCol, vec3(0.98));
+
+    gl_FragColor = vec4(finalCol, 1.0);
+  }
+</script>
+
 </head>
 
 <body>
 
-<header id="hero-wrap">
-  <canvas id="hero-canvas"></canvas>
+<canvas id="coffee-canvas"></canvas>
 
-  <div class="overlay">
-    <nav class="topnav">
-      <div class="brand">DigitalColdBrew</div>
-      <div class="links">
-        <a href="#services">Services</a>
-        <a href="#work">Work</a>
-        <a href="#pricing">Packages</a>
-        <a class="cta" href="#contact">Get a Quote</a>
-      </div>
-    </nav>
-
-    <section class="hero">
-      <div>
-        <h1><span class="tag">Creative Studio</span><br>We design brands & campaigns that convert.</h1>
-        <p>Web animations • SEO • Performance Ads • Branding</p>
-      </div>
-
-      <div class="floating">
-        <div class="badge">DCB</div>
-        <strong>DigitalColdBrew</strong><br>
-        Creative Agency
-      </div>
-    </section>
-  </div>
+<header class="nav">
+  <div class="brand">Digital <span>ColdBrew</span></div>
+  <nav>
+    <a href="#home">Home</a>
+    <a href="#about">Who we are</a>
+    <a href="#services">Services</a>
+    <a href="#case">Case Studies</a>
+    <a href="#contact">Contact</a>
+  </nav>
 </header>
 
+<main>
+  <section id="home" class="hero">
+    <h1>Digital ColdBrew</h1>
+    <p>Creative production for lifestyle brands — studio, shoots & performance marketing.</p>
+  </section>
 
-<script>
-console.log("Three.js loaded?", typeof THREE);
+  <section id="about" class="content">
+    <h2>Who we are</h2>
+    <p>We craft campaigns that blend creativity, storytelling and measurable performance.</p>
+  </section>
 
-const canvas = document.getElementById("hero-canvas");
-const renderer = new THREE.WebGLRenderer({ canvas, antialias: true, alpha: true });
-renderer.setSize(window.innerWidth, window.innerHeight);
-const scene = new THREE.Scene();
+  <section id="services" class="content">
+    <h2>Services</h2>
+    <ul>
+      <li>Social Media Marketing</li>
+      <li>Brand Strategy</li>
+      <li>Product Shoot & Video Production</li>
+      <li>Performance Marketing</li>
+    </ul>
+  </section>
 
-const camera = new THREE.PerspectiveCamera(50, window.innerWidth / window.innerHeight, 0.1, 100);
-camera.position.z = 6;
+  <section id="case" class="content">
+    <h2>Case Studies</h2>
+    <p>Coming soon — with real brand campaigns and detailed results.</p>
+  </section>
 
-const geometry = new THREE.PlaneGeometry(10, 6, 60, 60);
-const material = new THREE.MeshBasicMaterial({ color: 0x112233, wireframe: true });
-const mesh = new THREE.Mesh(geometry, material);
-scene.add(mesh);
+  <section id="contact" class="content">
+    <h2>Contact</h2>
+    <p>Email: contact@digitalcoldbrew.com</p>
+  </section>
+</main>
 
-function animate() {
-  mesh.rotation.y += 0.002;
-  renderer.render(scene, camera);
-  requestAnimationFrame(animate);
-}
-animate();
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
