@@ -1,154 +1,273 @@
-/* ------------------- Responsive Styles (fixed hero wrapping) ------------------- */
-/* Full replacement styles.css — paste whole file (keeps visual look but fixes wrapping issues) */
-
-:root{
-  --bg:#07090b;
-  --muted:#9aa6b2;
-  --white:#eef3f6;
-  --accent1:#895129; /* primary brown */
-  --accent2:#C77A45; /* lighter brown */
-  --card-bg:rgba(255,255,255,0.03);
-  --maxw:1200px;
-  font-family: "Inter", system-ui, sans-serif;
+/* ------------------ GLOBAL ------------------ */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-/* reset */
-*{box-sizing:border-box;margin:0;padding:0}
-html,body{height:100%;background:var(--bg);color:var(--white);-webkit-font-smoothing:antialiased;}
-a{color:inherit;text-decoration:none}
-
-/* top nav */
-.topnav{display:flex;justify-content:space-between;align-items:center;padding:20px 28px;z-index:30;position:relative;max-width:var(--maxw);margin:0 auto}
-.brand{font-weight:900;font-size:20px}
-.nav-links{display:flex;gap:18px;align-items:center}
-.nav-links a{font-weight:600;opacity:0.95}
-.cta{background:linear-gradient(90deg,var(--accent1),var(--accent2));padding:8px 14px;border-radius:10px;color:#021617;font-weight:700}
-
-/* hero area */
-#hero-wrap{position:relative;height:86vh;overflow:hidden}
-#hero-canvas{position:absolute;inset:0;width:100%;height:100%;display:block;z-index:1}
-.overlay{position:relative;z-index:6;padding:18px;max-width:var(--maxw);margin:0 auto}
-
-/* HERO layout */
-.hero{display:flex;align-items:flex-start;padding-top:28px;min-height:calc(86vh - 120px)}
-.hero-left{z-index:7;max-width:760px;padding-right:24px}
-
-/* TAG pill */
-.tag{display:inline-block;padding:8px 18px;border-radius:999px;font-weight:800;background:linear-gradient(90deg,var(--accent1),var(--accent2));font-size:18px;letter-spacing:0.1px}
-
-/* IMPORTANT: responsive headline rules below */
-h1{
-  font-weight:900;
-  margin:14px 0 6px;
-  line-height:1.02;
-  /* clamp reduces max & min font sizes; this prevents overflow on narrow screens */
-  font-size: clamp(28px, 6.2vw, 48px);
-  word-break: break-word;
-  hyphens: auto;
-  overflow-wrap: break-word;
-  -webkit-font-smoothing:antialiased;
+body {
+  background: #080808;
+  font-family: "Inter", sans-serif;
+  color: #ffffff;
+  line-height: 1.6;
 }
 
-/* a larger hero for desktop but safe for mobile */
-@media(min-width:1100px){
-  h1{
-    font-size: clamp(36px, 4.8vw, 64px);
-    line-height:1.02;
-  }
+a {
+  color: inherit;
+  text-decoration: none;
 }
 
-/* subtitle / actions */
-.sub{color:var(--muted);margin-bottom:18px;font-size:16px}
-.hero-actions{display:flex;gap:12px;margin-top:16px}
-.btn{display:inline-block;padding:10px 14px;border-radius:10px;text-decoration:none;font-weight:700}
-.primary{background:linear-gradient(90deg,var(--accent1),var(--accent2));color:#021617}
-.ghost{border:1px solid rgba(255,255,255,0.06);color:var(--white);background:transparent}
-
-/* hero bullets */
-.hero-bullets{list-style:none;padding:0;margin-top:18px;color:var(--muted);font-weight:600;max-width:70%}
-
-/* remove old floating card styles if present so it does not interfere */
-.hero-right{display:none}
-
-/* main sections */
-main{max-width:var(--maxw);margin:36px auto;padding:0 18px}
-.section{padding:48px 0}
-.section-title{font-size:24px;margin-bottom:8px;font-weight:800}
-.section-sub{color:var(--muted);margin-bottom:18px}
-
-/* cards grid */
-.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.service-card{background:var(--card-bg);padding:16px;border-radius:10px}
-
-/* portfolio/pricing */
-.portfolio{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
-.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
-.price-card{background:var(--card-bg);padding:18px;border-radius:10px}
-
-/* contact layout (grid) */
-.contact-grid{display:grid;grid-template-columns:1fr 320px;gap:24px;align-items:start}
-.contact-form{display:flex;align-items:center;gap:12px;flex-wrap:wrap;width:100%}
-.contact-form input, .contact-form textarea{
-  background:#0f0f0f;border:1px solid #222;padding:10px 12px;color:#fff;font-size:14px;border-radius:8px;resize:vertical;
-}
-.contact-form input{width:160px}
-.contact-form textarea{width:260px;height:56px}
-.contact-form .btn{padding:10px 14px;background:var(--accent1);border-radius:8px;border:none;color:#fff;cursor:pointer}
-
-/* contact info */
-.contact-info h4{margin:0 0 6px}
-.contact-info p{margin:0 0 12px;color:var(--muted)}
-
-/* footer */
-.site-footer{text-align:center;padding:20px;color:var(--muted);border-top:1px solid rgba(255,255,255,0.02);margin-top:40px}
-
-/* ---------------- Responsive adjustments ---------------- */
-
-/* medium screens */
-@media (max-width:1000px){
-  .overlay{padding:14px}
-  .hero-left{max-width:640px}
-  .contact-grid{grid-template-columns:1fr 260px}
-  .contact-form input{width:140px}
-  .contact-form textarea{width:220px}
+/* ------------------ NAVBAR ------------------ */
+.topnav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 25px 50px;
+  position: relative;
+  z-index: 10;
 }
 
-/* small screens & phones — critical fixes to prevent cutting/overflow */
-@media (max-width:760px){
-  /* stack nav items, keep brand visible */
-  .nav-links{display:none}
-  .topnav{padding:16px}
-  /* stack hero vertically and increase spacing so title doesn't hide under mobile UI */
-  .hero{flex-direction:column;align-items:flex-start;padding-top:40px;min-height:auto}
-  .overlay{padding:10px}
-  .hero-left{max-width:100%;padding-right:0}
-  /* headline smaller and with better spacing */
-  h1{
-    font-size: clamp(26px, 8.5vw, 38px);
-    line-height:1.05;
-    margin-top:12px;
-  }
-  .tag{font-size:16px;padding:8px 16px}
-  /* ensure hero canvas doesn't overlap by lowering height */
-  #hero-wrap{height:auto}
-  #hero-canvas{display:none} /* hide heavy canvas on small screens for performance and to avoid clipping issues */
-  /* contact stacks vertically on mobile */
-  .contact-grid{grid-template-columns:1fr;gap:18px}
-  .contact-form{flex-direction:column;align-items:stretch}
-  .contact-form input, .contact-form textarea{width:100%}
-  .contact-form textarea{height:120px}
-  .hero-bullets{max-width:100%}
-  /* reduce section padding */
-  .section{padding:32px 10px}
-  main{padding:0 12px}
+.brand {
+  font-size: 22px;
+  font-weight: 700;
 }
 
-/* very small narrow screens (small phones) */
-@media (max-width:380px){
-  h1{font-size: clamp(22px, 9.5vw, 34px)}
-  .tag{padding:6px 12px;font-size:14px}
-  .nav-links{display:none}
+.nav-links {
+  display: flex;
+  gap: 28px;
 }
 
-/* accessibility improvements */
-button, a.btn {outline-offset:3px}
+.nav-links a {
+  font-weight: 500;
+  opacity: 0.85;
+}
+
+.cta {
+  padding: 10px 22px;
+  background: #895129;
+  color: #fff;
+  border-radius: 10px;
+  font-weight: 600;
+}
+
+/* ------------------ HERO ------------------ */
+#hero-wrap {
+  position: relative;
+  height: 88vh;
+  overflow: hidden;
+}
+
+#hero-canvas {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  inset: 0;
+  z-index: 0;
+}
+
+.overlay {
+  position: relative;
+  z-index: 5;
+  padding: 0 50px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.hero-left {
+  margin-top: 90px;
+  max-width: 760px;
+}
+
+.tag {
+  background: #895129;
+  padding: 10px 25px;
+  display: inline-block;
+  border-radius: 30px;
+  font-weight: 600;
+  font-size: 38px;
+}
+
+h1 {
+  font-size: 56px;
+  font-weight: 900;
+  margin-top: 18px;
+}
+
+.sub {
+  margin-top: 15px;
+  opacity: 0.85;
+  font-size: 18px;
+}
+
+.hero-actions {
+  margin-top: 22px;
+  display: flex;
+  gap: 16px;
+}
+
+.btn {
+  padding: 12px 24px;
+  border-radius: 8px;
+  font-weight: 600;
+}
+
+.btn.primary {
+  background: #895129;
+  color: #fff;
+}
+
+.btn.ghost {
+  border: 1px solid #895129;
+}
+
+/* Bullets */
+.hero-bullets {
+  margin-top: 30px;
+  list-style: none;
+  font-size: 15px;
+}
+
+.hero-bullets li {
+  margin-bottom: 6px;
+}
+
+/* ------------------ SECTIONS ------------------ */
+.section {
+  padding: 100px 50px;
+  max-width: 1400px;
+  margin: auto;
+}
+
+.section-title {
+  font-size: 34px;
+  font-weight: 800;
+  margin-bottom: 12px;
+}
+
+.section-sub {
+  opacity: 0.8;
+  margin-bottom: 40px;
+}
+
+.alt {
+  background: #111;
+}
+
+/* ------------------ SERVICE CARDS ------------------ */
+.cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.service-card {
+  background: #111;
+  padding: 28px;
+  border-radius: 14px;
+  border: 1px solid #222;
+  transition: 0.3s ease;
+}
+
+.service-card:hover {
+  transform: translateY(-6px);
+  border-color: #895129;
+}
+
+/* ------------------ PORTFOLIO ------------------ */
+.portfolio {
+  display: flex;
+  gap: 22px;
+  flex-wrap: wrap;
+}
+
+.project {
+  background: #111;
+  padding: 22px;
+  border-radius: 14px;
+  border: 1px solid #222;
+  width: 280px;
+}
+
+.project-thumb {
+  height: 120px;
+  background: #222;
+  border-radius: 10px;
+  margin-bottom: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ------------------ PRICING ------------------ */
+.pricing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  gap: 25px;
+}
+
+.price-card {
+  background: #111;
+  padding: 32px;
+  border-radius: 14px;
+  border: 1px solid #222;
+}
+
+.recommended {
+  border-color: #895129;
+}
+
+/* ------------------ CONTACT SECTION ------------------ */
+.contact-grid {
+  display: grid;
+  grid-template-columns: 1fr 300px;
+  gap: 40px;
+  align-items: flex-start;
+}
+
+/* --- HORIZONTAL CONTACT FORM --- */
+.contact-form {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: nowrap;
+  width: 100%;
+}
+
+.contact-form input,
+.contact-form textarea {
+  background: #111;
+  border: 1px solid #333;
+  padding: 10px 14px;
+  color: #fff;
+  font-size: 15px;
+  border-radius: 6px;
+  resize: none;
+}
+
+/* fixed widths for straight line layout */
+.contact-form input {
+  width: 180px;
+}
+
+.contact-form textarea {
+  width: 260px;
+  height: 46px;
+}
+
+/* Button */
+.contact-form .btn {
+  padding: 10px 20px;
+  background: #895129;
+  white-space: nowrap;
+  border: none;
+  cursor: pointer;
+}
+
+/* ------------------ FOOTER ------------------ */
+.site-footer {
+  text-align: center;
+  padding: 30px;
+  border-top: 1px solid #222;
+  margin-top: 60px;
+  opacity: 0.7;
+}
